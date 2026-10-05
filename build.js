@@ -22,6 +22,8 @@ const GROUPS = [
 ];
 const bySlug = Object.fromEntries(SERVICES.map(s => [s.slug, s]));
 
+const GEAR = require("./src/gear.js");
+const AMAZON_TAG = "ruffquote-20";
 let GUIDES = [];
 try { GUIDES = require("./src/guides.js"); } catch (e) { if (e.code !== "MODULE_NOT_FOUND") throw e; }
 
@@ -44,6 +46,17 @@ const pic = (slug, i) => (PHOTOS[slug] || [])[i] || (PHOTOS[slug] || [])[0];
 function svcCard(s) {
   const [lo, hi] = typicalRange(s);
   return `<a class="svc" href="/${s.slug}/">${photo(pic(s.slug, 0), { sizes: "(min-width:860px) 320px, (min-width:560px) 50vw, 100vw" })}<div class="svc-body"><h3>${s.name}</h3><span class="from">Typical job $${lo}–$${hi}</span><span class="go">Check a price →</span></div></a>`;
+}
+
+// Amazon search links with our Associates tag; disclosure shown with every block
+function gearBlock(slug, heading) {
+  const items = GEAR[slug];
+  if (!items) return "";
+  return `<section class="gear">
+  <h2>${heading}</h2>
+  <div class="gear-grid">${items.map(([name, why, q]) => `<a class="gear-item" href="https://www.amazon.com/s?k=${encodeURIComponent(q).replace(/%20/g, "+")}&tag=${AMAZON_TAG}" target="_blank" rel="sponsored nofollow noopener"><b>${esc(name)}</b><span>${esc(why)}</span><em>See options on Amazon →</em></a>`).join("")}</div>
+  <p class="disclose">As an Amazon Associate, RuffQuote earns from qualifying purchases. It doesn't change your price.</p>
+</section>`;
 }
 
 function layout({ title, description, urlPath, body, service, jsonld, image }) {
@@ -87,7 +100,7 @@ ${body}
     ${GROUPS.map(([g, slugs]) => `<div><h4>${g}</h4><ul>${slugs.map(x => `<li><a href="/${x}/">${bySlug[x].name}</a></li>`).join("")}</ul></div>`).join("\n    ")}
   </div>
   <div class="wrap fine">
-    <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes. Photos from Unsplash and Pexels.</span>
+    <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes. Photos from Unsplash and Pexels. As an Amazon Associate, RuffQuote earns from qualifying purchases.</span>
     <span><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="mailto:${EMAIL}">${EMAIL}</a></span>
   </div>
 </footer>
@@ -150,6 +163,7 @@ function servicePage(s) {
     <h2>Common questions</h2>
     ${s.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
   </div>
+  ${gearBlock(s.slug, `Doing some of it yourself? Handy gear for ${esc(work)}`)}
   ${GUIDES.some(g => g.service === s.slug) ? `<div><h2>${s.name} cost guides</h2><ul class="guidelist">${GUIDES.filter(g => g.service === s.slug).map(g => `<li><a href="/${s.slug}/${g.slug}/">${esc(g.job[0].toUpperCase() + g.job.slice(1))} cost</a></li>`).join("")}</ul></div>` : ""}
   <div>
     <h2>Other services people price</h2>
@@ -309,6 +323,7 @@ ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 1
   <h2>Do it yourself or hire a pro?</h2>
   <p>${esc(g.diy)}</p>
 </section>
+${gearBlock(s.slug, "Gear that helps")}
 <section class="prose faq">
   <h2>Common questions</h2>
   ${g.faq.map(([q, a]) => `<details open><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
@@ -342,6 +357,7 @@ const pages = {
 <p>Last updated ${new Date().toISOString().slice(0, 10)}.</p>
 <p>RuffQuote's calculators run in your browser. We don't ask for your name, address or payment details, and the numbers you enter aren't sent to us.</p>
 <p>We may use privacy-friendly analytics to count visits, and may show ads from third parties such as Google. Those providers may use cookies to show relevant ads. You can manage ad personalization at <a href="https://adssettings.google.com">adssettings.google.com</a>.</p>
+<p>Some links go to Amazon. As an Amazon Associate, RuffQuote earns from qualifying purchases. Amazon may set cookies when you click those links.</p>
 <p>If you email us, we use your email only to reply. Contact: <a href="mailto:${EMAIL}">${EMAIL}</a>.</p>`),
   "404.html": simplePage("/404", "Page not found | RuffQuote", "This page doesn't exist.", `
 <h1>Page not found</h1><p>That page doesn't exist. <a href="/">Go to the home page</a> to pick a service.</p>`)
