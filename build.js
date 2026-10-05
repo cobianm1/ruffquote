@@ -75,7 +75,7 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 <header class="site-top">
   <div class="wrap top">
     <a class="brand" href="/" aria-label="RuffQuote home">${LOGO}<span>Ruff<b>Quote</b></span></a>
-    <nav aria-label="Main"><a href="/#services">Services</a><a href="/about/">About</a><a class="btn btn-sm" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></nav>
+    <nav aria-label="Main"><a href="/#services">Services</a><a href="/#guides">Cost guides</a><a href="/about/">About</a><a class="btn btn-sm" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></nav>
   </div>
 </header>
 <main class="page">
@@ -250,7 +250,7 @@ function homePage() {
     <div class="actions"><a class="btn btn-light" href="/car-detailing/#pros">Try the pro price tool</a><a class="btn btn-ghost" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></div>
   </div>
 </section>
-${GUIDES.length ? `<section><div class="eyebrow">Cost guides</div><h2 class="h2-lg">Popular price questions</h2><ul class="guidelist">${GUIDES.map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul></section>` : ""}
+${GUIDES.length ? `<section id="guides"><div class="eyebrow">Cost guides</div><h2 class="h2-lg">Popular price questions</h2><ul class="guidelist">${GUIDES.map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul></section>` : ""}
 <section class="prose">
   <h2>Where the numbers come from</h2>
   <p>Each calculator uses the typical time a job takes, the cost of supplies, and the hourly rates local pros charge. The low end of each range is a newer pro. The high end is an experienced pro who travels to you.</p>
