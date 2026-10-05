@@ -23,9 +23,14 @@
       list.innerHTML = data.pros.map(p => `<div class="pro-card${p.featured ? " featured" : ""}">
         <div class="pro-head"><b>${esc(p.business)}</b><small>${esc([p.city, p.state].filter(Boolean).join(", "))}${p.miles != null ? ` · ${p.miles} mi` : ""}</small></div>
         ${p.jobs && p.jobs.length ? `<ul class="pro-jobs">${p.jobs.slice(0, 6).map(j => `<li><span>${esc(j.name)}</span><b>$${Number(j.price).toLocaleString("en-US")}</b></li>`).join("")}</ul>` : ""}
-        <div class="pro-actions">${p.phone ? `<a class="btn btn-sm" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">Call ${esc(p.phone)}</a>` : ""}${p.email ? `<a href="mailto:${esc(p.email)}">Email</a>` : ""}${p.website ? `<a href="${esc(p.website)}" target="_blank" rel="nofollow noopener">Website</a>` : ""}</div>
+        <div class="pro-actions">${p.phone ? `<a class="btn btn-sm" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">Call ${esc(p.phone)}</a>` : ""}${p.email ? `<a href="mailto:${esc(p.email)}">Email</a>` : ""}${p.website ? `<a href="${esc(p.website)}" target="_blank" rel="nofollow noopener">Website</a>` : ""}<button type="button" class="pro-report" data-id="${esc(p.id)}">Report</button></div>
       </div>`).join("") + `<p class="pros-note">Prices are set by each business. RuffQuote doesn't check or guarantee them. <a href="/get-listed/?service=${esc(svc)}">Are you a ${esc(pro)}? Get listed</a></p>`;
     }
+    list.addEventListener("click", e => {
+      const b = e.target.closest(".pro-report");
+      if (!b || !confirm("Report this listing as fake, spam or a scam?")) return;
+      fetch("/api/report", { method: "POST", body: new URLSearchParams({ service: svc, id: b.dataset.id }) }).finally(() => { b.textContent = "Reported. Thanks"; b.disabled = true; });
+    });
     form.addEventListener("submit", e => { e.preventDefault(); const z = form.zip.value.trim(); if (/^\d{5}$/.test(z)) load(z); });
     load("");
   });

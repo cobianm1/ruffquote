@@ -429,7 +429,7 @@ function getListedPage() {
     <ul class="checks">
       <li>Free basic listing. No account or credit card.</li>
       <li>Takes about a minute. Tap a common job, type your price, done.</li>
-      <li>We review each listing, then it shows on your service page for customers in your area.</li>
+      <li>Your listing goes live on your service page for customers in your area.</li>
       <li>Featured spots at the top of results are coming soon. Tick the box if you want first dibs.</li>
     </ul>
   </div>
@@ -452,7 +452,7 @@ function getListedPage() {
       <div class="field"><label class="label" for="phone">Phone</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div>
       <div class="field"><label class="label" for="email">Email</label><input id="email" name="email" type="email" maxlength="120" autocomplete="email"></div>
     </div>
-    <small class="muted">Add a phone or email (or both) so customers can reach you.</small>
+    <small class="muted">Add a phone number so customers can call you. Listings without one get checked by us before they show.</small>
     <div class="two">
       <div class="field"><label class="label" for="name">Your name</label><input id="name" name="name" maxlength="80" autocomplete="name"></div>
       <div class="field"><label class="label" for="website">Website or Facebook page</label><input id="website" name="website" maxlength="200" inputmode="url"></div>
@@ -513,7 +513,7 @@ if (GUIDES.length) pages["cost-guides/index.html"] = guidesIndexPage();
 pages["get-listed/index.html"] = getListedPage();
 pages["get-listed/thanks/index.html"] = simplePage("/get-listed/thanks/", "Thanks! | RuffQuote", "Your listing request was received.", `
 <h1>Thanks, you're on the list!</h1>
-<p>We got your business details. We review every new listing to keep RuffQuote free of spam. Once it's approved, your business and prices show on your service page for customers in your area.</p>
+<p>We got your business details. Your business and prices now show on your service page for customers in your area. If anything needs a closer look, we'll check it first.</p>
 <p><a href="/">Back to RuffQuote</a></p>`);
 
 fs.rmSync(OUT, { recursive: true, force: true });
