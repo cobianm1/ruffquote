@@ -21,10 +21,12 @@ const GROUPS = [
 ];
 const bySlug = Object.fromEntries(SERVICES.map(s => [s.slug, s]));
 
-// Price range for a service's default job, same formula as the browser calculator
-function typicalRange(s) {
-  const v = {};
-  s.fields.forEach(f => { v[f.id] = f.default; });
+let GUIDES = [];
+try { GUIDES = require("./src/guides.js"); } catch (e) { if (e.code !== "MODULE_NOT_FOUND") throw e; }
+
+// Price range for a job (default inputs if no v), same formula as the browser calculator
+function typicalRange(s, v) {
+  if (!v) { v = {}; s.fields.forEach(f => { v[f.id] = f.default; }); }
   const est = s.estimate(v);
   const p = (rate, over, travel) => up5(Math.max(s.minCharge || 0, (est.hours * rate + est.supplies + travel) * (1 + over / 100)));
   return [p(s.lowRate, 10, 0), p(s.highRate, 25, 14)];
@@ -147,6 +149,7 @@ function servicePage(s) {
     <h2>Common questions</h2>
     ${s.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
   </div>
+  ${GUIDES.some(g => g.service === s.slug) ? `<div><h2>${s.name} cost guides</h2><ul class="guidelist">${GUIDES.filter(g => g.service === s.slug).map(g => `<li><a href="/${s.slug}/${g.slug}/">${esc(g.job[0].toUpperCase() + g.job.slice(1))} cost</a></li>`).join("")}</ul></div>` : ""}
   <div>
     <h2>Other services people price</h2>
     <div class="services">${related.map(x => svcCard(bySlug[x])).join("")}</div>
@@ -246,6 +249,7 @@ function homePage() {
     <div class="actions"><a class="btn btn-light" href="/car-detailing/#pros">Try the pro price tool</a><a class="btn btn-ghost" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></div>
   </div>
 </section>
+${GUIDES.length ? `<section><div class="eyebrow">Cost guides</div><h2 class="h2-lg">Popular price questions</h2><ul class="guidelist">${GUIDES.map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul></section>` : ""}
 <section class="prose">
   <h2>Where the numbers come from</h2>
   <p>Each calculator uses the typical time a job takes, the cost of supplies, and the hourly rates local pros charge. The low end of each range is a newer pro. The high end is an experienced pro who travels to you.</p>
@@ -256,6 +260,69 @@ function homePage() {
     description: "Free calculators that show what home, car and handyman services should cost, from gutter cleaning and oil changes to drain cleaning and TV mounting.",
     urlPath: "/", body, image: pic("home", 0)
   });
+}
+
+function guidePage(g) {
+  const s = bySlug[g.service];
+  const [lo, hi] = typicalRange(s, g.calc);
+  const mid = up5((lo + hi) / 2);
+  const est = s.estimate(g.calc);
+  const others = GUIDES.filter(x => x.service === g.service && x.slug !== g.slug);
+  const body = `
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/${s.slug}/">${s.name}</a> / <span>${esc(g.job[0].toUpperCase() + g.job.slice(1))} cost</span></nav>
+<section class="guide-top">
+  <div>
+    <div class="eyebrow">${s.name} cost guide</div>
+    <h1>How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</h1>
+    <p class="lede">${esc(g.intro)}</p>
+  </div>
+  <div class="card answer">
+    <div class="eyebrow">Typical price</div>
+    <div class="big">$${lo} – $${hi}</div>
+    <div class="muted">Most people pay around $${mid}. About ${Math.round(est.hours * 4) / 4} hours of work.</div>
+    <a class="btn" href="/${s.slug}/">Get a price for your job</a>
+  </div>
+</section>
+${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 100vw", eager: true })}
+<section class="prose wide">
+  <h2>${esc(g.job[0].toUpperCase() + g.job.slice(1))} prices at a glance</h2>
+  <div class="tablebox"><table>
+    <thead><tr><th>Job</th><th class="num">Newer pro</th><th class="num">Experienced pro</th></tr></thead>
+    <tbody>${g.rows.map(r => { const [a, b] = typicalRange(s, r.v); return `<tr><td><b>${esc(r.label)}</b></td><td class="num price">$${a}</td><td class="num price">$${b}</td></tr>`; }).join("")}</tbody>
+  </table></div>
+  <p class="muted">Labor and basic supplies. Big parts or appliances you buy yourself are extra. Prices run higher in big cities.</p>
+</section>
+<div class="split">
+  <section class="prose">
+    <h2>What's usually included</h2>
+    <ul class="checks">${g.included.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+    <h2>What changes the price</h2>
+    <ul class="checks">${g.factors.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+  </section>
+  <aside class="card tipcard">
+    <h3>Ways to save</h3>
+    <ul>${g.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+  </aside>
+</div>
+<section class="prose">
+  <h2>Do it yourself or hire a pro?</h2>
+  <p>${esc(g.diy)}</p>
+</section>
+<section class="prose faq">
+  <h2>Common questions</h2>
+  ${g.faq.map(([q, a]) => `<details open><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
+</section>
+<section class="proband slim">
+  <div class="proband-text">
+    <h2 class="h2-lg">Got a quote for ${esc(g.job)}?</h2>
+    <p>Enter your job details and see if the price is fair. ${s.pro[0].toUpperCase() + s.pro.slice(1)}s can build a price list too.</p>
+    <div class="actions"><a class="btn btn-light" href="/${s.slug}/">Open the ${s.name.toLowerCase()} calculator</a><a class="btn btn-ghost" href="/${s.slug}/#pros">I'm a ${s.pro}</a></div>
+  </div>
+</section>
+${others.length ? `<section><h2>More ${s.name.toLowerCase()} cost guides</h2><ul class="guidelist">${others.map(x => `<li><a href="/${x.service}/${x.slug}/">${esc(x.job[0].toUpperCase() + x.job.slice(1))} cost</a></li>`).join("")}</ul></section>` : ""}`;
+  const jsonld = { "@context": "https://schema.org", "@type": "FAQPage",
+    mainEntity: g.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
+  return layout({ title: `${g.title} | RuffQuote`, description: g.description, urlPath: `/${s.slug}/${g.slug}/`, body, jsonld, image: pic(s.slug, 1) });
 }
 
 function simplePage(urlPath, title, description, html) {
@@ -279,6 +346,7 @@ const pages = {
 <h1>Page not found</h1><p>That page doesn't exist. <a href="/">Go to the home page</a> to pick a service.</p>`)
 };
 SERVICES.forEach(s => { pages[`${s.slug}/index.html`] = servicePage(s); });
+GUIDES.forEach(g => { pages[`${g.service}/${g.slug}/index.html`] = guidePage(g); });
 
 fs.rmSync(OUT, { recursive: true, force: true });
 for (const [file, html] of Object.entries(pages)) {
@@ -290,7 +358,7 @@ fs.mkdirSync(path.join(OUT, "assets"), { recursive: true });
 for (const f of ["services.js", "app.js", "style.css"]) fs.copyFileSync(path.join(__dirname, "src", f), path.join(OUT, "assets", f));
 fs.writeFileSync(path.join(OUT, "favicon.svg"), FAVICON);
 fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
-const urls = ["/", ...SERVICES.map(s => `/${s.slug}/`), "/about/", "/privacy/"];
+const urls = ["/", ...SERVICES.map(s => `/${s.slug}/`), ...GUIDES.map(g => `/${g.service}/${g.slug}/`), "/about/", "/privacy/"];
 fs.writeFileSync(path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${SITE}${u}</loc></url>`).join("\n")}\n</urlset>\n`);
 console.log(`Built ${Object.keys(pages).length} pages into public/`);
