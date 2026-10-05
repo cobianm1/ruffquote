@@ -429,7 +429,7 @@ function getListedPage() {
     <ul class="checks">
       <li>Free basic listing. No account or credit card.</li>
       <li>Takes about a minute. Tap a common job, type your price, done.</li>
-      <li>Your listing goes live on your service page for customers in your area.</li>
+      <li>We review each listing, then it shows on your service page for customers in your area.</li>
       <li>Featured spots at the top of results are coming soon. Tick the box if you want first dibs.</li>
     </ul>
   </div>
@@ -513,7 +513,7 @@ if (GUIDES.length) pages["cost-guides/index.html"] = guidesIndexPage();
 pages["get-listed/index.html"] = getListedPage();
 pages["get-listed/thanks/index.html"] = simplePage("/get-listed/thanks/", "Thanks! | RuffQuote", "Your listing request was received.", `
 <h1>Thanks, you're on the list!</h1>
-<p>We got your business details. Your listing and prices now show on your service page for customers in your area. We'll reach out if we need anything.</p>
+<p>We got your business details. We review every new listing to keep RuffQuote free of spam. Once it's approved, your business and prices show on your service page for customers in your area.</p>
 <p><a href="/">Back to RuffQuote</a></p>`);
 
 fs.rmSync(OUT, { recursive: true, force: true });

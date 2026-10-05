@@ -5,7 +5,7 @@
 import { lookupZip } from "./zips.js";
 
 // true: listings show right away. false: they're saved with "approved": false until edited to true.
-const AUTO_PUBLISH = true;
+const AUTO_PUBLISH = false;
 const FIELDS = { business: 120, name: 80, service: 80, zip: 10, radius: 4, phone: 40, email: 120, website: 200, plan: 20, notes: 1000 };
 const MAX_JOBS = 12;
 
