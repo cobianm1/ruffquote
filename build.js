@@ -65,14 +65,22 @@ function svcCard(s) {
 }
 
 // Amazon search links with our Associates tag; disclosure shown with every block
+const amazonUrl = q => `https://www.amazon.com/s?k=${encodeURIComponent(q).replace(/%20/g, "+")}&tag=${AMAZON_TAG}`;
 function gearBlock(slug, heading) {
   const items = GEAR[slug];
   if (!items) return "";
-  return `<section class="gear">
+  return `<section class="gear" id="gear">
   <h2>${heading}</h2>
-  <div class="gear-grid">${items.map(([name, why, q]) => `<a class="gear-item" href="https://www.amazon.com/s?k=${encodeURIComponent(q).replace(/%20/g, "+")}&tag=${AMAZON_TAG}" target="_blank" rel="sponsored nofollow noopener"><b>${esc(name)}</b><span>${esc(why)}</span><em>See options on Amazon →</em></a>`).join("")}</div>
+  <div class="gear-grid">${items.map(([name, why, q]) => `<a class="gear-item" href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener"><b>${esc(name)}</b><span>${esc(why)}</span><em>See options on Amazon →</em></a>`).join("")}</div>
   <p class="disclose">As an Amazon Associate, RuffQuote earns from qualifying purchases. It doesn't change your price.</p>
 </section>`;
+}
+
+// Small row of top Amazon picks for the price cards
+function gearQuick(slug) {
+  const items = (GEAR[slug] || []).slice(0, 3);
+  if (!items.length) return "";
+  return `<div class="quickshop"><b>Doing it yourself?</b> Top picks on Amazon: ${items.map(([name, , q]) => `<a href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener">${esc(name)}</a>`).join("")}<a class="more" href="#gear">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>`;
 }
 
 function layout({ title, description, urlPath, body, service, jsonld, image }) {
@@ -165,8 +173,10 @@ function servicePage(s) {
         <p class="muted">We're adding trusted local ${proPlural} soon. Are you one? Get listed so customers here can find you.</p>
         <a class="linkbtn" href="#pros" data-go="pros">See the ${s.pro} price tool</a>
       </div>
+      ${gearQuick(s.slug)}
     </div>
   </div>
+  ${gearBlock(s.slug, `Doing some of it yourself? Handy gear for ${esc(work)}`)}
   <div class="split">
   <div class="prose">
     <h2>What affects the price of ${work}</h2>
@@ -179,7 +189,6 @@ function servicePage(s) {
     <h2>Common questions</h2>
     ${s.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
   </div>
-  ${gearBlock(s.slug, `Doing some of it yourself? Handy gear for ${esc(work)}`)}
   ${GUIDES.some(g => g.service === s.slug) ? `<div><h2>${s.name} cost guides</h2><ul class="guidelist">${GUIDES.filter(g => g.service === s.slug).map(g => `<li><a href="/${s.slug}/${g.slug}/">${esc(g.job[0].toUpperCase() + g.job.slice(1))} cost</a></li>`).join("")}</ul></div>` : ""}
   <div>
     <h2>Other services people price</h2>
@@ -315,6 +324,7 @@ function guidePage(g) {
     <div class="big">$${lo} – $${hi}</div>
     <div class="muted">Most people pay around $${mid}. About ${Math.round(est.hours * 4) / 4} hours of work.</div>
     <a class="btn" href="/${s.slug}/">Get a price for your job</a>
+    ${gearQuick(s.slug)}
   </div>
 </section>
 ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 100vw", eager: true })}
@@ -326,6 +336,7 @@ ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 1
   </table></div>
   <p class="muted">Labor and basic supplies. Big parts or appliances you buy yourself are extra. Prices run higher in big cities.</p>
 </section>
+${gearBlock(s.slug, "Gear that helps")}
 <div class="split">
   <section class="prose">
     <h2>What's usually included</h2>
@@ -342,7 +353,7 @@ ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 1
   <h2>Do it yourself or hire a pro?</h2>
   <p>${esc(g.diy)}</p>
 </section>
-${gearBlock(s.slug, "Gear that helps")}
+
 <section class="prose faq">
   <h2>Common questions</h2>
   ${g.faq.map(([q, a]) => `<details open><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}

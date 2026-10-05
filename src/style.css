@@ -181,6 +181,12 @@ details p{margin:8px 0 0}
 .gear-item span{color:var(--muted);font-size:14px}
 .gear-item em{font-style:normal;color:var(--accent);font-weight:600;font-size:14px;margin-top:4px}
 .disclose{margin:0;font-size:13px;color:var(--muted)}
+.quickshop{border-top:1px dashed var(--line);padding-top:12px;font-size:14px;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.quickshop a{background:#fff6dc;color:#7a4a12;border:1px solid #f2d27a;border-radius:999px;padding:5px 11px;font-weight:600;text-decoration:none}
+.quickshop a:hover{background:#f2b632;color:#1b2428}
+.quickshop small{flex-basis:100%;color:var(--muted);font-size:12px}
+.quickshop a.more{background:none;border:0;color:var(--accent);padding:5px 2px;text-decoration:underline}
+@media (prefers-color-scheme: dark){.quickshop a{background:#3a2e10;color:#f6d77e;border-color:#6b5420}}
 /* Footer */
 .site-foot{background:#0f2329;color:#b8c9ce;margin-top:20px}
 .site-foot a{color:#d5e3e7}
