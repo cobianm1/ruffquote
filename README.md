@@ -13,4 +13,4 @@ Run `node build.js` after any change. It rewrites `public/`, which is what gets 
 
 ## Hosting
 
-Cloudflare Pages, connected to this repo. Build command: none. Output directory: `public`.
+Cloudflare Workers (static assets), connected to this repo. `wrangler.jsonc` tells Cloudflare to serve the `public` folder. Build command: none. Deploy command: `npx wrangler deploy`.
