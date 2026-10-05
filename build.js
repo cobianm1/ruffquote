@@ -14,6 +14,7 @@ const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
 
 const PHOTOS = require("./src/photos.js");
 const up5 = x => Math.ceil(x / 5) * 5;
+const plural = w => w.endsWith("man") ? w.slice(0, -3) + "men" : w + "s";
 const GROUPS = [
   ["Car", ["car-detailing", "mobile-mechanic"]],
   ["Outside the house", ["pressure-washing", "window-cleaning", "gutter-cleaning", "lawn-mowing", "trash-can-cleaning", "christmas-light-installation"]],
@@ -98,7 +99,7 @@ ${service ? `<script src="/assets/services.js"></script><script src="/assets/app
 
 function servicePage(s) {
   const work = s.work || s.noun;
-  const proPlural = s.pro + "s";
+  const proPlural = plural(s.pro);
   const [tlo, thi] = typicalRange(s);
   const group = GROUPS.find(([, slugs]) => slugs.includes(s.slug));
   const related = [...group[1], ...SERVICES.map(x => x.slug)].filter((x, i, a) => x !== s.slug && a.indexOf(x) === i).slice(0, 3);
@@ -315,7 +316,7 @@ ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 1
 <section class="proband slim">
   <div class="proband-text">
     <h2 class="h2-lg">Got a quote for ${esc(g.job)}?</h2>
-    <p>Enter your job details and see if the price is fair. ${s.pro[0].toUpperCase() + s.pro.slice(1)}s can build a price list too.</p>
+    <p>Enter your job details and see if the price is fair. ${plural(s.pro)[0].toUpperCase() + plural(s.pro).slice(1)} can build a price list too.</p>
     <div class="actions"><a class="btn btn-light" href="/${s.slug}/">Open the ${s.name.toLowerCase()} calculator</a><a class="btn btn-ghost" href="/${s.slug}/#pros">I'm a ${s.pro}</a></div>
   </div>
 </section>
