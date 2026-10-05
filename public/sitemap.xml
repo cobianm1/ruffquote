@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://ruffquote.com/</loc></url>
+  <url><loc>https://ruffquote.com/home-services/</loc></url>
+  <url><loc>https://ruffquote.com/car-services/</loc></url>
+  <url><loc>https://ruffquote.com/cost-guides/</loc></url>
   <url><loc>https://ruffquote.com/car-detailing/</loc></url>
   <url><loc>https://ruffquote.com/pressure-washing/</loc></url>
   <url><loc>https://ruffquote.com/window-cleaning/</loc></url>
@@ -12,6 +15,10 @@
   <url><loc>https://ruffquote.com/mobile-mechanic/</loc></url>
   <url><loc>https://ruffquote.com/drain-cleaning/</loc></url>
   <url><loc>https://ruffquote.com/handyman/</loc></url>
+  <url><loc>https://ruffquote.com/junk-removal/</loc></url>
+  <url><loc>https://ruffquote.com/carpet-cleaning/</loc></url>
+  <url><loc>https://ruffquote.com/interior-painting/</loc></url>
+  <url><loc>https://ruffquote.com/tree-trimming/</loc></url>
   <url><loc>https://ruffquote.com/mobile-mechanic/oil-change-cost/</loc></url>
   <url><loc>https://ruffquote.com/mobile-mechanic/tire-rotation-cost/</loc></url>
   <url><loc>https://ruffquote.com/mobile-mechanic/brake-pad-replacement-cost/</loc></url>
@@ -32,6 +39,17 @@
   <url><loc>https://ruffquote.com/pressure-washing/driveway-pressure-washing-cost/</loc></url>
   <url><loc>https://ruffquote.com/pressure-washing/house-washing-cost/</loc></url>
   <url><loc>https://ruffquote.com/gutter-cleaning/gutter-cleaning-cost-two-story/</loc></url>
+  <url><loc>https://ruffquote.com/junk-removal/junk-removal-cost/</loc></url>
+  <url><loc>https://ruffquote.com/junk-removal/appliance-removal-cost/</loc></url>
+  <url><loc>https://ruffquote.com/carpet-cleaning/carpet-cleaning-cost-per-room/</loc></url>
+  <url><loc>https://ruffquote.com/carpet-cleaning/pet-stain-carpet-cleaning-cost/</loc></url>
+  <url><loc>https://ruffquote.com/interior-painting/cost-to-paint-a-room/</loc></url>
+  <url><loc>https://ruffquote.com/interior-painting/cost-to-paint-house-interior/</loc></url>
+  <url><loc>https://ruffquote.com/tree-trimming/tree-trimming-cost/</loc></url>
+  <url><loc>https://ruffquote.com/tree-trimming/cost-to-trim-a-large-tree/</loc></url>
+  <url><loc>https://ruffquote.com/christmas-light-installation/christmas-light-installation-cost/</loc></url>
+  <url><loc>https://ruffquote.com/christmas-light-installation/two-story-christmas-light-installation-cost/</loc></url>
+  <url><loc>https://ruffquote.com/christmas-light-installation/roofline-christmas-lights-cost/</loc></url>
   <url><loc>https://ruffquote.com/about/</loc></url>
   <url><loc>https://ruffquote.com/privacy/</loc></url>
 </urlset>

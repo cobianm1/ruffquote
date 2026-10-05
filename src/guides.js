@@ -779,6 +779,451 @@ const GUIDES = [
       ["How often should two-story gutters be cleaned?", "Twice a year is common, in spring and fall. More often if tall trees hang over the roof."],
       ["Do gutter guards mean I never need cleaning?", "No. Guards reduce clogs but still need checking, and fine debris can build up on top or underneath."]
     ]
+  },
+
+  // ---------------- Junk removal ----------------
+  {
+    slug: "junk-removal-cost",
+    service: "junk-removal",
+    job: "junk removal",
+    title: "Junk Removal Cost by Truck Load: What You Should Pay",
+    description: "Junk removal cost from a single item to a full truck load. See what is included, why dump fees and stairs change the price, and how to get a lower quote.",
+    intro: "Most junk haulers price by how much space your stuff takes up in their truck. The price covers a two-person crew, the truck, and the dump or recycling fees. Heavy items and hard-to-reach spots push it higher.",
+    rows: [
+      { label: "A few items, ground floor", v: { load: 0, heavy: 0, access: 1 } },
+      { label: "1/4 truck load", v: { load: 1, heavy: 0, access: 1 } },
+      { label: "1/2 truck load", v: { load: 2, heavy: 0, access: 1 } },
+      { label: "3/4 truck load", v: { load: 3, heavy: 0, access: 1 } },
+      { label: "Full truck load", v: { load: 4, heavy: 0, access: 1 } }
+    ],
+    calc: { load: 2, heavy: 0, access: 1 },
+    included: [
+      "Two-person crew to lift and carry everything",
+      "Loading into the truck from where the items sit",
+      "Hauling to a landfill, transfer station or recycler",
+      "Dump and recycling fees for normal household junk",
+      "A quick sweep of the area after loading"
+    ],
+    factors: [
+      "Volume. The more of the truck your items fill, the more you pay.",
+      "Weight. Concrete, dirt and shingles are heavy and can cost more than bulky but light junk.",
+      "Special items. Fridges, freezers, tires, mattresses and TVs often carry their own fees.",
+      "Access. Basements, attics and stairs take longer than a pile in the driveway."
+    ],
+    diy: "If you have a pickup truck and some free time, you can haul junk to the local dump yourself and pay only the gate fee. Many cities also offer free bulk pickup days. Hiring a crew makes sense for heavy items, big cleanouts, or when you have no truck.",
+    tips: [
+      "Sell or donate anything in good shape first. Less volume means a lower price.",
+      "Pile everything in the garage or driveway before the crew arrives to save loading time.",
+      "Ask for a price on site before loading. Most haulers quote after seeing the pile."
+    ],
+    faq: [
+      ["How much junk fits in a full truck?", "A typical junk truck holds about 12 to 15 cubic yards, roughly the contents of a one-car garage packed waist high."],
+      ["Do junk haulers donate usable items?", "Many do. Ask when booking if you want furniture or appliances in good shape donated instead of dumped."],
+      ["What will a junk hauler not take?", "Most will not take paint, chemicals, propane tanks, asbestos or other hazardous waste. Your city usually runs drop-off days for those."]
+    ]
+  },
+  {
+    slug: "appliance-removal-cost",
+    service: "junk-removal",
+    job: "appliance removal",
+    title: "Appliance Removal Cost: Fridge, Washer and Stove Haul Away",
+    description: "Appliance removal cost for a fridge, washer, dryer or stove, from one item to several. Learn why recycling fees apply and when the store will take it free.",
+    intro: "Hauling away an old appliance is a quick job for a junk crew, but appliances carry recycling fees that a bag of trash does not. Fridges and freezers cost the most because the refrigerant must be removed safely. Basements and stairs add labor.",
+    rows: [
+      { label: "1 appliance, garage or ground floor", v: { load: 0, heavy: 1, access: 1 } },
+      { label: "1 appliance, basement or upstairs", v: { load: 0, heavy: 1, access: 2 } },
+      { label: "2 appliances, ground floor", v: { load: 0, heavy: 2, access: 1 } },
+      { label: "3 appliances, ground floor", v: { load: 1, heavy: 3, access: 1 } }
+    ],
+    calc: { load: 0, heavy: 1, access: 1 },
+    included: [
+      "Appliance disconnected from power and moved out by two people",
+      "Floors and door frames protected on the way out",
+      "Loading and hauling to an appliance recycler",
+      "Recycling and disposal fees"
+    ],
+    factors: [
+      "Refrigerant. Fridges, freezers and AC units need refrigerant recovered before recycling.",
+      "Hookups. Gas stoves and water lines should be shut off and capped first, sometimes by a plumber.",
+      "Stairs. Moving a washer or fridge out of a basement is slow and heavy work.",
+      "Scrap value. Some haulers charge less for metal appliances they can sell for scrap."
+    ],
+    diy: "Two people with an appliance dolly and a pickup can haul most appliances to a scrap yard or recycler. Some scrap yards even pay a little for metal. Disconnect gas lines with care, or have a pro cap them, and never cut refrigerant lines yourself.",
+    tips: [
+      "Buying a new appliance? Ask the store to haul away the old one when they deliver.",
+      "Check if your utility runs a fridge recycling program. Some pay you to take old units.",
+      "Bundle the appliance with other junk to make better use of one truck visit."
+    ],
+    faq: [
+      ["Why does fridge removal cost more?", "Fridges and freezers contain refrigerant that must be recovered by a certified tech before the metal can be recycled."],
+      ["Will the store take my old appliance?", "Many big stores will remove the old one when they deliver a new one, often for a small fee or free with purchase."],
+      ["Do I need to disconnect the appliance first?", "Electric units just need unplugging. Gas stoves, dryers and anything with a water line should be shut off and capped before pickup."]
+    ]
+  },
+
+  // ---------------- Carpet cleaning ----------------
+  {
+    slug: "carpet-cleaning-cost-per-room",
+    service: "carpet-cleaning",
+    job: "carpet cleaning",
+    title: "Carpet Cleaning Cost Per Room: Prices for 1 to 5 Rooms",
+    description: "Carpet cleaning cost per room for 1 to 5 rooms with hot water extraction. See what is included, how stairs and stains change the price, and how to save.",
+    intro: "Carpet cleaners usually price by the room, with a minimum charge for small jobs. The per-room price drops as you add rooms, because setup and travel are spread out. Stairs, stains and pet odors add to the total.",
+    rows: [
+      { label: "1 room", v: { rooms: 1, stairs: 0, treat: 0 } },
+      { label: "2 rooms", v: { rooms: 2, stairs: 0, treat: 0 } },
+      { label: "3 rooms", v: { rooms: 3, stairs: 0, treat: 0 } },
+      { label: "4 rooms", v: { rooms: 4, stairs: 0, treat: 0 } },
+      { label: "5 rooms", v: { rooms: 5, stairs: 0, treat: 0 } }
+    ],
+    calc: { rooms: 3, stairs: 0, treat: 0 },
+    included: [
+      "Pre-vacuum of open areas",
+      "Pre-treatment of traffic lanes and normal spots",
+      "Hot water extraction of each room",
+      "Carpet groomed so it dries evenly",
+      "Corners protected so hoses do not scuff walls"
+    ],
+    factors: [
+      "Room size. Most companies count a room as up to about 200 to 250 sq ft. Bigger spaces count as more.",
+      "Stairs. Each step is cleaned by hand, so a flight of stairs adds real time.",
+      "Stains. Wine, coffee and pet stains need extra treatment and may not fully come out.",
+      "Furniture. Moving beds, sofas and dressers is often extra."
+    ],
+    diy: "You can rent a carpet cleaning machine from a hardware or grocery store and do a few rooms in an afternoon. Rental machines are weaker than truck-mounted units, so carpets stay wetter longer and deep soil may stay behind. For a yearly deep clean, a pro usually does better.",
+    tips: [
+      "Vacuum well and clear small items off the floor before the cleaner arrives.",
+      "Book more rooms in one visit. The cost per room usually drops as the job gets bigger.",
+      "Ask whether the price is per room or per square foot, and how big a room can be."
+    ],
+    faq: [
+      ["How often should carpets be cleaned?", "Most carpet makers recommend a professional cleaning every 12 to 18 months, more often with kids or pets."],
+      ["What counts as a room?", "Usually a space up to about 200 to 250 sq ft. Large living rooms or open areas may count as two."],
+      ["Can I walk on the carpet after cleaning?", "Yes, in clean socks or shoe covers. Wait until it is dry before putting furniture back or walking in shoes."]
+    ]
+  },
+  {
+    slug: "pet-stain-carpet-cleaning-cost",
+    service: "carpet-cleaning",
+    job: "pet stain carpet cleaning",
+    title: "Pet Stain and Odor Carpet Cleaning Cost",
+    description: "Pet stain carpet cleaning cost for urine and odor, by number of rooms. How enzyme treatment works, what changes the price, and when carpet is too far gone.",
+    intro: "Pet urine soaks below the carpet fibers into the pad, so a normal clean often leaves the smell behind. Cleaners treat it with enzymes or special rinses that break down the urine. That takes more product and time than a standard clean.",
+    rows: [
+      { label: "1 room, pet urine or odor", v: { rooms: 1, stairs: 0, treat: 2 } },
+      { label: "3 rooms, pet urine or odor", v: { rooms: 3, stairs: 0, treat: 2 } },
+      { label: "5 rooms, pet urine or odor", v: { rooms: 5, stairs: 0, treat: 2 } },
+      { label: "3 rooms, normal clean, for comparison", v: { rooms: 3, stairs: 0, treat: 0 } }
+    ],
+    calc: { rooms: 3, stairs: 0, treat: 2 },
+    included: [
+      "Urine spots found with a UV light or moisture meter",
+      "Enzyme or odor treatment soaked into each spot",
+      "Hot water extraction of the whole room",
+      "Extra rinse passes on treated areas",
+      "Carpet groomed and set to dry"
+    ],
+    factors: [
+      "How deep it goes. Urine that reached the pad or subfloor may need a sub-surface extraction tool.",
+      "How old it is. Old stains can leave permanent color changes even after the smell is gone.",
+      "Number of spots. A few spots cost less than a room with many accidents.",
+      "Pad replacement. If the pad is soaked, the only full fix may be replacing it, which is a separate job."
+    ],
+    diy: "Fresh accidents respond well to blotting, a rinse with water, and an enzyme cleaner from the pet store. Older, repeated spots are harder because the urine is in the pad. A pro with a sub-surface tool has a better chance, but no one can promise every stain will vanish.",
+    tips: [
+      "Treat fresh accidents right away with an enzyme cleaner. Avoid ammonia cleaners, which can draw pets back.",
+      "Point out every spot you know about when the cleaner arrives.",
+      "Ask whether the price covers the whole room or only the treated spots."
+    ],
+    faq: [
+      ["Will professional cleaning remove pet urine smell?", "Usually it removes most or all of it. Spots that soaked deep into the pad or subfloor can come back on humid days."],
+      ["Why do stains come back after cleaning?", "Urine left in the pad wicks back up to the surface as the carpet dries. That is why pet treatments use extra rinsing."],
+      ["Is it cheaper to replace the carpet?", "For a few rooms, cleaning is almost always cheaper. Replacing makes sense only when the pad and subfloor are badly soaked."]
+    ]
+  },
+
+  // ---------------- Interior painting ----------------
+  {
+    slug: "cost-to-paint-a-room",
+    service: "interior-painting",
+    job: "painting a room",
+    title: "Cost to Paint a Room: Prices by Room Size",
+    description: "Cost to paint a room by size, walls only or with ceiling and trim, with paint included. See what changes the price and when painting it yourself makes sense.",
+    intro: "Painting one room is mostly labor. Prep, cutting in along the edges, and two coats on the walls take most of a day for an average bedroom. Paint and supplies are a smaller part of the bill.",
+    rows: [
+      { label: "Small room (10x10), walls only", v: { rooms: 1, size: 0, ceiling: 0, trim: 0, cond: 0 } },
+      { label: "Medium room (12x12), walls only", v: { rooms: 1, size: 1, ceiling: 0, trim: 0, cond: 0 } },
+      { label: "Large room (14x16), walls only", v: { rooms: 1, size: 2, ceiling: 0, trim: 0, cond: 0 } },
+      { label: "Medium room, color change", v: { rooms: 1, size: 1, ceiling: 0, trim: 0, cond: 1 } },
+      { label: "Medium room, walls, ceiling and trim", v: { rooms: 1, size: 1, ceiling: 1, trim: 1, cond: 0 } }
+    ],
+    calc: { rooms: 1, size: 1, ceiling: 0, trim: 0, cond: 0 },
+    included: [
+      "Furniture moved to the center and covered",
+      "Floors protected with drop cloths",
+      "Nail holes filled and rough spots sanded",
+      "Edges cut in by brush along ceiling and trim",
+      "Two coats of mid-grade paint on the walls"
+    ],
+    factors: [
+      "Room size. Larger rooms and ceilings over 8 feet need more paint and time.",
+      "Color change. Dark to light colors often need primer or a third coat.",
+      "Wall repairs. Cracks, dents and large holes need patching and drying time.",
+      "Trim and ceilings. Brush work on trim is slow, and ceilings are tiring to roll."
+    ],
+    diy: "Painting a room is one of the easiest home projects to do yourself. Good tape, a quality roller cover and patience with cutting in make the biggest difference. Hire a pro for tall ceilings, stairwells, big color changes or when you want it done in one day.",
+    tips: [
+      "Move small items and take down wall decor yourself to save the painter time.",
+      "Stick with the same color or a similar shade to avoid paying for extra coats.",
+      "Paint several rooms in one booking. The per-room price is usually lower."
+    ],
+    faq: [
+      ["How much paint does a room need?", "An average 12 by 12 bedroom takes about two gallons for two coats on the walls, and about one more for the ceiling."],
+      ["Does the price include paint?", "Most painters include mid-grade paint. Premium lines or many colors in one room may cost extra."],
+      ["How long does it take a pro to paint a room?", "Walls in an average bedroom usually take one day. Add ceiling, trim and doors and it may stretch into a second day."]
+    ]
+  },
+  {
+    slug: "cost-to-paint-house-interior",
+    service: "interior-painting",
+    job: "painting a house interior",
+    title: "Cost to Paint a House Interior: Prices by Number of Rooms",
+    description: "Cost to paint a house interior by number of rooms, walls only or with ceilings and trim. What drives the price and how to save on a whole-house paint job.",
+    intro: "Painting a whole interior is priced like many single rooms, with a lower cost per room because setup is shared. The biggest choice is whether ceilings and trim are included. Those details can nearly double the time.",
+    rows: [
+      { label: "4 medium rooms, walls only", v: { rooms: 4, size: 1, ceiling: 0, trim: 0, cond: 0 } },
+      { label: "6 medium rooms, walls only", v: { rooms: 6, size: 1, ceiling: 0, trim: 0, cond: 0 } },
+      { label: "6 medium rooms, walls, ceilings and trim", v: { rooms: 6, size: 1, ceiling: 1, trim: 1, cond: 0 } },
+      { label: "8 medium rooms, walls only", v: { rooms: 8, size: 1, ceiling: 0, trim: 0, cond: 0 } },
+      { label: "8 medium rooms, walls, ceilings, trim and doors", v: { rooms: 8, size: 1, ceiling: 1, trim: 2, cond: 0 } }
+    ],
+    calc: { rooms: 6, size: 1, ceiling: 0, trim: 0, cond: 0 },
+    included: [
+      "Furniture moved and floors covered room by room",
+      "Holes and cracks patched and sanded",
+      "Two coats of mid-grade paint on all walls",
+      "Ceilings, trim and doors when included",
+      "Daily cleanup and a final walk-through"
+    ],
+    factors: [
+      "Number of rooms. Bedrooms, halls and living areas each add time and paint.",
+      "Ceilings and trim. These take careful brush work and add a lot of hours.",
+      "Stairwells and tall walls. Two-story foyers need scaffolding or tall ladders.",
+      "Empty versus furnished. An empty house is faster because nothing needs moving."
+    ],
+    diy: "Painting a whole house yourself can save a lot, but expect several weekends of work. Most people do fine on walls and get tired on trim and ceilings. A common middle path is to paint bedrooms yourself and hire a pro for stairwells, high ceilings and trim.",
+    tips: [
+      "Paint before you move in, when rooms are empty and the job goes faster.",
+      "Use one wall color for most rooms. Fewer colors mean less cutting in and less wasted paint.",
+      "Get at least three written quotes that list rooms, coats and paint brand."
+    ],
+    faq: [
+      ["How long does it take to paint a house interior?", "A crew of two or three can paint an average three-bedroom home in about three to six days, depending on ceilings and trim."],
+      ["Is it cheaper to paint walls only?", "Yes. Leaving ceilings and trim out can cut the cost by a third or more if they are still in good shape."],
+      ["Should I paint before or after new floors?", "Before is usually better. Drips on old floors do not matter, and installers can touch up baseboards after."]
+    ]
+  },
+
+  // ---------------- Tree trimming ----------------
+  {
+    slug: "tree-trimming-cost",
+    service: "tree-trimming",
+    job: "tree trimming",
+    title: "Tree Trimming Cost by Tree Height",
+    description: "Tree trimming cost for small, medium, large and very large trees, with cleanup. See what changes the price, when to trim, and when to call the power company.",
+    intro: "Tree trimming is priced mostly by how tall the tree is. A short tree can be pruned from the ground or a ladder in under an hour. Large trees need climbing gear or a bucket truck and a crew working most of a day.",
+    rows: [
+      { label: "Small tree, under 15 ft", v: { trees: 1, height: 0, near: 0, haul: 0 } },
+      { label: "Medium tree, 15 to 30 ft", v: { trees: 1, height: 1, near: 0, haul: 0 } },
+      { label: "Large tree, 30 to 60 ft", v: { trees: 1, height: 2, near: 0, haul: 0 } },
+      { label: "Very large tree, over 60 ft", v: { trees: 1, height: 3, near: 0, haul: 0 } },
+      { label: "3 medium trees", v: { trees: 3, height: 1, near: 0, haul: 0 } }
+    ],
+    calc: { trees: 1, height: 1, near: 0, haul: 0 },
+    included: [
+      "Dead, broken and crossing branches removed",
+      "Limbs cut back from the roof, siding and walkways",
+      "Cuts made at the branch collar so the tree heals well",
+      "Branches chipped and hauled away",
+      "Yard raked and cleaned up"
+    ],
+    factors: [
+      "Height. Each step up in height means more climbing, more rigging and more time.",
+      "Location. Limbs over a house, fence or power line must be lowered with ropes.",
+      "Tree type and health. Dead wood breaks unpredictably and is slower to work on.",
+      "Access. Backyards a truck cannot reach mean dragging every branch to the chipper."
+    ],
+    diy: "Small trees and low branches are easy to prune yourself with loppers, a pruning saw or a pole saw. Anything that needs a ladder and a chainsaw at the same time is a job for a pro. Tree work is one of the more dangerous home tasks, so be honest about your limits.",
+    tips: [
+      "Trim in late winter when trees are dormant and many crews have more openings.",
+      "Have several trees done in one visit to share the setup and chipper cost.",
+      "Ask if the company is insured and if an arborist will be on the job."
+    ],
+    faq: [
+      ["How often should trees be trimmed?", "Most mature shade trees need pruning every three to five years. Young and fruit trees benefit from lighter yearly pruning."],
+      ["Is trimming cheaper than removal?", "Yes, usually much cheaper. Removing a whole tree takes longer and may add stump grinding."],
+      ["Should I hire a certified arborist?", "For large, valuable or sick trees, yes. An arborist knows how much to cut without harming the tree."]
+    ]
+  },
+  {
+    slug: "cost-to-trim-a-large-tree",
+    service: "tree-trimming",
+    job: "trimming a large tree",
+    title: "Cost to Trim a Large Tree: 30 to 60 Feet and Taller",
+    description: "Cost to trim a large tree from 30 to 60 feet or more, in an open yard or over a house. What adds to the price, from power lines to cleanup, and how to save.",
+    intro: "Large trees take a crew, climbing gear or a bucket truck, and careful rigging. Branches over a roof or near lines have to be lowered piece by piece. Most of the price is crew time, with cleanup and disposal on top.",
+    rows: [
+      { label: "Large tree, open yard", v: { trees: 1, height: 2, near: 0, haul: 0 } },
+      { label: "Large tree, over the house", v: { trees: 1, height: 2, near: 1, haul: 0 } },
+      { label: "Large tree, near power lines", v: { trees: 1, height: 2, near: 2, haul: 0 } },
+      { label: "Large tree, debris left cut and stacked", v: { trees: 1, height: 2, near: 0, haul: 1 } },
+      { label: "Very large tree over 60 ft, open yard", v: { trees: 1, height: 3, near: 0, haul: 0 } }
+    ],
+    calc: { trees: 1, height: 2, near: 0, haul: 0 },
+    included: [
+      "Climber or bucket truck to reach the upper canopy",
+      "Dead and hazardous limbs removed",
+      "Crown thinned and cleared from the roof",
+      "Heavy limbs lowered with ropes when needed",
+      "Chipping, hauling and yard cleanup"
+    ],
+    factors: [
+      "Rigging. Limbs that cannot just drop must be tied off and lowered, which is slow.",
+      "Power lines. Only line-clearance trained crews should work near lines.",
+      "Equipment access. A bucket truck is faster, but only if it can reach the tree.",
+      "Wood volume. Big trees produce a lot of debris to chip and haul."
+    ],
+    diy: "Trimming a large tree is not a DIY job. It means working at height with a chainsaw while heavy limbs fall, often near a house or lines. You can save by stacking the wood yourself or keeping it for firewood, but leave the cutting to an insured crew.",
+    tips: [
+      "Ask the crew to leave the wood cut to firewood length if you can use it.",
+      "Call your utility before hiring anyone for limbs near the main lines. They may do it free.",
+      "Get quotes in writing that say how much of the canopy will be removed."
+    ],
+    faq: [
+      ["Why does a large tree cost so much more to trim?", "It takes a skilled climber or a bucket truck, more crew time, and more cleanup than a small tree."],
+      ["How much of a tree can be trimmed at once?", "Most arborists remove no more than about a quarter of the canopy in a year to keep the tree healthy."],
+      ["Will my insurance pay for tree trimming?", "Usually not for routine trimming. Insurance may cover removing a tree that falls on your house in a storm."]
+    ]
+  },
+
+  // ---------------- Christmas light installation ----------------
+  {
+    slug: "christmas-light-installation-cost",
+    service: "christmas-light-installation",
+    job: "Christmas light installation",
+    title: "Christmas Light Installation Cost: Prices With Takedown",
+    description: "Christmas light installation cost by length of roofline, with lights, takedown and storage. See what is included, what adds to the price, and when to book.",
+    intro: "Professional Christmas light installers usually price by the foot of roofline, with commercial LED lights included. Most packages also cover taking the lights down after the season. Height and roof pitch set the rest of the price.",
+    rows: [
+      { label: "100 ft, 1 story, install and takedown", v: { feet: 100, stories: 0, takedown: 1 } },
+      { label: "150 ft, 1 story, install only", v: { feet: 150, stories: 0, takedown: 0 } },
+      { label: "150 ft, 1 story, install and takedown", v: { feet: 150, stories: 0, takedown: 1 } },
+      { label: "200 ft, 1 story, install and takedown", v: { feet: 200, stories: 0, takedown: 1 } }
+    ],
+    calc: { feet: 150, stories: 0, takedown: 1 },
+    included: [
+      "Roofline measured and a lighting plan agreed",
+      "Commercial-grade LED lights cut to fit",
+      "Clips attached to gutters or shingles with no nails",
+      "Lights plugged in, tested and set on a timer",
+      "Takedown and storage after the holidays when included"
+    ],
+    factors: [
+      "Roofline length. Most installers price per foot of lit roofline.",
+      "Height and pitch. Steep or tall roofs need more time and safety gear.",
+      "Lights. Lease or buy, and LED color choices, change the price.",
+      "Extras. Trees, bushes, wreaths and walkway lights are priced separately."
+    ],
+    diy: "Many people hang their own lights on a one-story home with clips and a sturdy ladder. It takes a weekend and some care on the roof edge. Pros add speed, custom-cut lights and takedown, which many people value more than the install itself.",
+    tips: [
+      "Book in September or October for the best choice of dates.",
+      "Ask if the price drops for a second year with the same lights and plan.",
+      "Measure your roofline yourself so you can compare quotes per foot."
+    ],
+    faq: [
+      ["When do installers put lights up?", "Most start in early November and finish by mid-December. Takedown usually runs through January."],
+      ["Do I need an outdoor outlet?", "Yes, at least one working outdoor outlet near the display. Installers can tell you if you need more."],
+      ["Are the lights mine to keep?", "It depends. Many installers lease and store the lights for you. Some sell them outright for a higher first-year price."]
+    ]
+  },
+  {
+    slug: "two-story-christmas-light-installation-cost",
+    service: "christmas-light-installation",
+    job: "two-story Christmas light installation",
+    title: "Two-Story Christmas Light Installation Cost",
+    description: "Christmas light installation cost for a two-story house by length of roofline. Why height adds to the price, what is included, and how to keep the cost down.",
+    intro: "Lighting a two-story home costs more than a ranch house because the crew works from tall ladders or on a steeper, higher roof. The lights cost about the same per foot. The extra is mostly time and safety setup.",
+    rows: [
+      { label: "150 ft, 2 stories, install and takedown", v: { feet: 150, stories: 1, takedown: 1 } },
+      { label: "200 ft, 2 stories, install and takedown", v: { feet: 200, stories: 1, takedown: 1 } },
+      { label: "250 ft, 2 stories, install and takedown", v: { feet: 250, stories: 1, takedown: 1 } },
+      { label: "200 ft, 2 stories, install only", v: { feet: 200, stories: 1, takedown: 0 } },
+      { label: "200 ft, 1 story, for comparison", v: { feet: 200, stories: 0, takedown: 1 } }
+    ],
+    calc: { feet: 200, stories: 1, takedown: 1 },
+    included: [
+      "Tall ladders or roof anchors set up for safe work",
+      "Commercial LED lights cut to the roofline",
+      "Upper and lower rooflines clipped and lit",
+      "Lights tested and set on a timer",
+      "Takedown and storage when included"
+    ],
+    factors: [
+      "Height. Second-story gutters and peaks need longer ladders and more moves.",
+      "Roof pitch. Steep roofs may need harnesses and anchors.",
+      "Peaks and dormers. Lighting every gable takes more lights and more time than a straight gutter run.",
+      "Lower rooflines. Porches and garages add short runs at different heights."
+    ],
+    diy: "Hanging lights on a second story means working on a tall ladder or a steep roof, often in cold or wet weather. Falls from that height cause serious injuries. Many people light the first-floor rooflines and bushes themselves and hire out the upper roof.",
+    tips: [
+      "Light only the front-facing rooflines. That is what most people see from the street.",
+      "Skip the takedown package only if you are comfortable on the roof in January.",
+      "Ask neighbors to book the same crew. Some installers discount several homes on one street."
+    ],
+    faq: [
+      ["Why does a two-story house cost more?", "The crew needs taller ladders, moves them more often and works more slowly for safety."],
+      ["Can lights stay up all year?", "Clips and lights left up wear out faster and can damage gutters. Most installers take them down and store them."],
+      ["What if it snows before takedown?", "Installers usually wait for a safe, dry day. Takedown windows often run into late January."]
+    ]
+  },
+  {
+    slug: "roofline-christmas-lights-cost",
+    service: "christmas-light-installation",
+    job: "lighting a roofline for Christmas",
+    title: "Roofline Christmas Lights Cost: Pricing by the Foot",
+    description: "What it costs to light a roofline for Christmas, from a small front gutter run to a large home. How installers measure, price by the foot, and what adds to it.",
+    intro: "Roofline lighting is the core of most professional holiday displays. Installers measure the gutters and peaks you want lit and price the job by the foot. Longer rooflines cost more in total but often less per foot.",
+    rows: [
+      { label: "80 ft, front of a small home", v: { feet: 80, stories: 0, takedown: 1 } },
+      { label: "150 ft, typical front roofline", v: { feet: 150, stories: 0, takedown: 1 } },
+      { label: "250 ft, front and sides", v: { feet: 250, stories: 0, takedown: 1 } },
+      { label: "400 ft, whole house", v: { feet: 400, stories: 0, takedown: 1 } }
+    ],
+    calc: { feet: 150, stories: 0, takedown: 1 },
+    included: [
+      "Gutters and peaks measured on site",
+      "LED C9 or C7 bulbs on wire cut to length",
+      "Clips on gutters and shingles with no holes",
+      "Clean, even bulb spacing along every line",
+      "Takedown and storage after the season"
+    ],
+    factors: [
+      "Total feet. More roofline means more lights, clips and ladder moves.",
+      "Peaks. Gables and dormers take longer than straight gutter runs.",
+      "Height. Second stories cost more per foot than a single story.",
+      "Power. Long runs may need extra outlets or extension cords hidden along the house."
+    ],
+    diy: "A straight single-story roofline is a manageable weekend project with gutter clips and a good ladder. Getting the bulbs evenly spaced and the cords hidden takes patience. For peaks, steep roofs and long runs, a pro will be faster and safer.",
+    tips: [
+      "Measure the rooflines you want lit and compare quotes on the same number of feet.",
+      "Light the front of the house first. Sides and back add cost but are seen less.",
+      "Ask whether warm white or multicolor bulbs cost the same."
+    ],
+    faq: [
+      ["How do I measure my roofline?", "Walk the gutters with a measuring wheel or tape, and add the slope length of each peak you want lit."],
+      ["What bulbs do installers use?", "Most use LED C9 or C7 bulbs on commercial wire. They are bright, sturdy and use little power."],
+      ["Is it cheaper per foot for a long roofline?", "Often yes. Setup and travel are spread over more feet, so the per-foot cost usually drops on bigger jobs."]
+    ]
   }
 ];
 

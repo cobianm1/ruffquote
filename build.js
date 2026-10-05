@@ -15,12 +15,28 @@ const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
 const PHOTOS = require("./src/photos.js");
 const up5 = x => Math.ceil(x / 5) * 5;
 const plural = w => w.endsWith("man") ? w.slice(0, -3) + "men" : w + "s";
-const GROUPS = [
-  ["Car", ["car-detailing", "mobile-mechanic"]],
-  ["Outside the house", ["pressure-washing", "window-cleaning", "gutter-cleaning", "lawn-mowing", "trash-can-cleaning", "christmas-light-installation"]],
-  ["Inside and repairs", ["house-cleaning", "drain-cleaning", "handyman"]]
-];
 const bySlug = Object.fromEntries(SERVICES.map(s => [s.slug, s]));
+// Top-level categories, each split into groups of service slugs
+const CATS = [
+  { key: "home", name: "Home services", path: "/home-services/", blurb: "Cleaning, yard work, repairs and more around the house.", groups: [
+    ["Outside the house", ["pressure-washing", "window-cleaning", "gutter-cleaning", "lawn-mowing", "tree-trimming", "trash-can-cleaning", "christmas-light-installation"]],
+    ["Inside and repairs", ["house-cleaning", "carpet-cleaning", "interior-painting", "junk-removal", "drain-cleaning", "handyman"]]
+  ] },
+  { key: "car", name: "Car services", path: "/car-services/", blurb: "Detailing, oil changes, brakes and other car care.", groups: [
+    ["Car care", ["car-detailing", "mobile-mechanic"]]
+  ] }
+];
+CATS.forEach(c => { c.groups = c.groups.map(([g, slugs]) => [g, slugs.filter(x => bySlug[x])]); c.slugs = c.groups.flatMap(([, x]) => x); });
+const ungrouped = SERVICES.map(s => s.slug).filter(x => !CATS.some(c => c.slugs.includes(x)));
+if (ungrouped.length) { CATS[0].groups[1][1].push(...ungrouped); CATS[0].slugs.push(...ungrouped); }
+const GROUPS = CATS.flatMap(c => c.groups);
+const catOf = slug => CATS.find(c => c.slugs.includes(slug));
+
+// Compact service row: small photo, name, typical price
+function svcTile(s) {
+  const [lo, hi] = typicalRange(s);
+  return `<a class="tile" href="/${s.slug}/">${photo(pic(s.slug, 0), { sizes: "72px" })}<span><b>${s.name}</b><small>Typical job $${lo}–$${hi}</small></span><i aria-hidden="true">›</i></a>`;
+}
 
 const GEAR = require("./src/gear.js");
 const AMAZON_TAG = "ruffquote-20";
@@ -88,7 +104,7 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 <header class="site-top">
   <div class="wrap top">
     <a class="brand" href="/" aria-label="RuffQuote home">${LOGO}<span>Ruff<b>Quote</b></span></a>
-    <nav aria-label="Main"><a href="/#services">Services</a><a href="/#guides">Cost guides</a><a href="/about/">About</a><a class="btn btn-sm" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></nav>
+    <nav aria-label="Main"><a href="/home-services/">Home services</a><a href="/car-services/">Car services</a><a href="/cost-guides/">Cost guides</a><a class="btn btn-sm" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></nav>
   </div>
 </header>
 <main class="page">
@@ -97,7 +113,7 @@ ${body}
 <footer class="site-foot">
   <div class="wrap foot">
     <div class="foot-brand"><a class="brand" href="/">${LOGO}<span>Ruff<b>Quote</b></span></a><p>Fair prices for home and car services. Free for homeowners and pros.</p></div>
-    ${GROUPS.map(([g, slugs]) => `<div><h4>${g}</h4><ul>${slugs.map(x => `<li><a href="/${x}/">${bySlug[x].name}</a></li>`).join("")}</ul></div>`).join("\n    ")}
+    ${CATS.map(c => `<div><h4><a href="${c.path}">${c.name}</a></h4><ul>${c.slugs.map(x => `<li><a href="/${x}/">${bySlug[x].name}</a></li>`).join("")}</ul></div>`).join("\n    ")}
   </div>
   <div class="wrap fine">
     <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes. Photos from Unsplash and Pexels. As an Amazon Associate, RuffQuote earns from qualifying purchases.</span>
@@ -117,7 +133,7 @@ function servicePage(s) {
   const group = GROUPS.find(([, slugs]) => slugs.includes(s.slug));
   const related = [...group[1], ...SERVICES.map(x => x.slug)].filter((x, i, a) => x !== s.slug && a.indexOf(x) === i).slice(0, 3);
   const body = `
-<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">${group[0]}</a> / <span>${s.name}</span></nav>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="${catOf(s.slug).path}">${catOf(s.slug).name}</a> / <span>${s.name}</span></nav>
 <div class="banner">
   ${photo(pic(s.slug, 0), { cls: "banner-img", sizes: "(min-width:1072px) 1040px, 100vw", eager: true })}
   <div class="banner-text"><span class="pill">${s.name}</span><p>A typical job runs <b>$${tlo}–$${thi}</b>. Adjust the details below for your own price.</p></div>
@@ -231,20 +247,23 @@ function homePage() {
     <p>See what gutter cleaning, oil changes, drain snaking, house cleaning and more should cost near you. No sign-up, no sales calls.</p>
     <form class="pick" action="/" onsubmit="event.preventDefault();var v=this.svc.value;if(v)location.href='/'+v+'/';">
       <label class="sr" for="svc">What do you need done?</label>
-      <select id="svc" name="svc" required><option value="">What do you need done?</option>${SERVICES.map(x => `<option value="${x.slug}">${x.name}</option>`).join("")}</select>
+      <select id="svc" name="svc" required><option value="">What do you need done?</option>${CATS.map(c => `<optgroup label="${c.name}">${c.slugs.map(x => `<option value="${x}">${bySlug[x].name}</option>`).join("")}</optgroup>`).join("")}</select>
       <button class="btn btn-lg" type="submit">See prices</button>
     </form>
     <a class="hero-pro" href="#pros">Run a service business? Build your price list →</a>
   </div>
 </section>
 <section class="perks">
-  <div><b>${SERVICES.length} services</b><span>From car detailing to drain cleaning</span></div>
+  <div><b>${SERVICES.length} services</b><span>From junk removal to oil changes</span></div>
   <div><b>Price in seconds</b><span>Answer a few questions, get a fair range</span></div>
   <div><b>100% free</b><span>No account, no phone number, no spam</span></div>
 </section>
 <section id="services" class="groups">
   <div><div class="eyebrow">Pick a service</div><h2 class="h2-lg">What are you pricing?</h2></div>
-  ${GROUPS.map(([g, slugs]) => `<div class="group"><h3 class="group-h">${g}</h3><div class="services">${slugs.map(x => svcCard(bySlug[x])).join("")}</div></div>`).join("\n  ")}
+  <div class="cattabs">
+    ${CATS.map((c, i) => `<input type="radio" name="cat" id="cat-${c.key}"${i === 0 ? " checked" : ""}><label for="cat-${c.key}">${c.name} <small>${c.slugs.length}</small></label>`).join("")}
+    ${CATS.map(c => `<div class="catpanel" id="panel-${c.key}">${c.groups.map(([g, slugs]) => `<div class="group">${c.groups.length > 1 ? `<h3 class="group-h">${g}</h3>` : ""}<div class="tiles">${slugs.map(x => svcTile(bySlug[x])).join("")}</div></div>`).join("")}<a class="seeall" href="${c.path}">See all ${c.name.toLowerCase()} with photos →</a></div>`).join("")}
+  </div>
 </section>
 <section class="steps">
   <div><div class="eyebrow">How it works</div><h2 class="h2-lg">Check a quote in three steps</h2></div>
@@ -264,7 +283,7 @@ function homePage() {
     <div class="actions"><a class="btn btn-light" href="/car-detailing/#pros">Try the pro price tool</a><a class="btn btn-ghost" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></div>
   </div>
 </section>
-${GUIDES.length ? `<section id="guides"><div class="eyebrow">Cost guides</div><h2 class="h2-lg">Popular price questions</h2><ul class="guidelist">${GUIDES.map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul></section>` : ""}
+${GUIDES.length ? `<section id="guides"><div class="eyebrow">Cost guides</div><h2 class="h2-lg">Popular price questions</h2><ul class="guidelist">${["tv-mounting-cost", "oil-change-cost", "junk-removal-cost", "cost-to-paint-a-room", "main-sewer-line-cleaning-cost", "christmas-light-installation-cost", "deep-cleaning-cost", "brake-pad-replacement-cost"].map(x => GUIDES.find(g => g.slug === x)).filter(Boolean).map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul><p><a class="seeall" href="/cost-guides/">See all ${GUIDES.length} cost guides →</a></p></section>` : ""}
 <section class="prose">
   <h2>Where the numbers come from</h2>
   <p>Each calculator uses the typical time a job takes, the cost of supplies, and the hourly rates local pros charge. The low end of each range is a newer pro. The high end is an experienced pro who travels to you.</p>
@@ -284,7 +303,7 @@ function guidePage(g) {
   const est = s.estimate(g.calc);
   const others = GUIDES.filter(x => x.service === g.service && x.slug !== g.slug);
   const body = `
-<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/${s.slug}/">${s.name}</a> / <span>${esc(g.job[0].toUpperCase() + g.job.slice(1))} cost</span></nav>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="${catOf(s.slug).path}">${catOf(s.slug).name}</a> / <a href="/${s.slug}/">${s.name}</a> / <span>${esc(g.job[0].toUpperCase() + g.job.slice(1))} cost</span></nav>
 <section class="guide-top">
   <div>
     <div class="eyebrow">${s.name} cost guide</div>
@@ -341,6 +360,34 @@ ${others.length ? `<section><h2>More ${s.name.toLowerCase()} cost guides</h2><ul
   return layout({ title: `${g.title} | RuffQuote`, description: g.description, urlPath: `/${s.slug}/${g.slug}/`, body, jsonld, image: pic(s.slug, 1) });
 }
 
+function categoryPage(c) {
+  const guides = GUIDES.filter(g => c.slugs.includes(g.service));
+  const other = CATS.find(x => x !== c);
+  const body = `
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span>${c.name}</span></nav>
+<section>
+  <div class="eyebrow">${c.slugs.length} calculators</div>
+  <h1>${c.name}: what should it cost?</h1>
+  <p class="lede">${c.blurb} Pick a service to see a fair price range for your job. Pros can build a price list on the same page.</p>
+</section>
+${c.groups.map(([g, slugs]) => `<section class="group">${c.groups.length > 1 ? `<h2 class="group-h">${g}</h2>` : ""}<div class="services">${slugs.map(x => svcCard(bySlug[x])).join("")}</div></section>`).join("\n")}
+${guides.length ? `<section><h2>${c.name.replace(" services", "")} cost guides</h2><ul class="guidelist">${guides.map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul></section>` : ""}
+<p><a class="seeall" href="${other.path}">Looking for ${other.name.toLowerCase()}? →</a></p>`;
+  return layout({ title: `${c.name} Cost Calculators | RuffQuote`, description: `Free cost calculators for ${c.name.toLowerCase()}: ${c.slugs.map(x => bySlug[x].name.toLowerCase()).join(", ")}. See fair prices before you book.`.slice(0, 158), urlPath: c.path, body, image: pic(c.slugs[0], 0) });
+}
+
+function guidesIndexPage() {
+  const body = `
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span>Cost guides</span></nav>
+<section>
+  <div class="eyebrow">${GUIDES.length} guides</div>
+  <h1>Cost guides</h1>
+  <p class="lede">Plain answers to "how much does it cost?" for common home and car jobs, with price tables and tips to save.</p>
+</section>
+${CATS.map(c => `<section class="group"><h2 class="group-h">${c.name}</h2>${c.slugs.filter(x => GUIDES.some(g => g.service === x)).map(x => `<div><h3>${bySlug[x].name}</h3><ul class="guidelist">${GUIDES.filter(g => g.service === x).map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul></div>`).join("")}</section>`).join("\n")}`;
+  return layout({ title: "Cost Guides for Home and Car Services | RuffQuote", description: "How much do common home and car jobs cost? Price tables, what's included and ways to save for junk removal, painting, oil changes, TV mounting and more.", urlPath: "/cost-guides/", body });
+}
+
 function simplePage(urlPath, title, description, html) {
   return layout({ title, description, urlPath, body: `<section class="prose">${html}</section>` });
 }
@@ -364,6 +411,8 @@ const pages = {
 };
 SERVICES.forEach(s => { pages[`${s.slug}/index.html`] = servicePage(s); });
 GUIDES.forEach(g => { pages[`${g.service}/${g.slug}/index.html`] = guidePage(g); });
+CATS.forEach(c => { pages[`${c.path.slice(1)}index.html`] = categoryPage(c); });
+if (GUIDES.length) pages["cost-guides/index.html"] = guidesIndexPage();
 
 fs.rmSync(OUT, { recursive: true, force: true });
 for (const [file, html] of Object.entries(pages)) {
@@ -375,7 +424,7 @@ fs.mkdirSync(path.join(OUT, "assets"), { recursive: true });
 for (const f of ["services.js", "app.js", "style.css"]) fs.copyFileSync(path.join(__dirname, "src", f), path.join(OUT, "assets", f));
 fs.writeFileSync(path.join(OUT, "favicon.svg"), FAVICON);
 fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
-const urls = ["/", ...SERVICES.map(s => `/${s.slug}/`), ...GUIDES.map(g => `/${g.service}/${g.slug}/`), "/about/", "/privacy/"];
+const urls = ["/", ...CATS.map(c => c.path), "/cost-guides/", ...SERVICES.map(s => `/${s.slug}/`), ...GUIDES.map(g => `/${g.service}/${g.slug}/`), "/about/", "/privacy/"];
 fs.writeFileSync(path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${SITE}${u}</loc></url>`).join("\n")}\n</urlset>\n`);
 console.log(`Built ${Object.keys(pages).length} pages into public/`);

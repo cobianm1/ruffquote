@@ -59,5 +59,29 @@ module.exports = {
     ["Stud finder", "Find studs before mounting a TV or shelves.", "stud finder"],
     ["TV wall mount", "Check that it matches your TV's size and VESA pattern.", "tv wall mount"],
     ["Voltage tester", "Confirms power is off before you touch a light fixture.", "non contact voltage tester"]
+  ],
+  "junk-removal": [
+    ["Contractor trash bags", "Thick bags for loose junk that won't tear on sharp edges.", "contractor trash bags heavy duty"],
+    ["Furniture dolly", "Rolls heavy items to the curb without lifting the whole way.", "furniture moving dolly"],
+    ["Moving straps", "Spread the weight when two people carry a sofa or dresser.", "forearm forklift lifting straps"],
+    ["Work gloves", "Protect your hands from nails, splinters and broken glass.", "work gloves grip"]
+  ],
+  "carpet-cleaning": [
+    ["Carpet spot cleaner", "A small portable machine for spills between deep cleans.", "portable carpet spot cleaner"],
+    ["Enzyme pet stain remover", "Breaks down urine so the smell does not come back.", "enzyme pet stain odor remover carpet"],
+    ["Carpet stain remover spray", "Treat fresh spills before they set.", "carpet stain remover spray"],
+    ["Upright carpet cleaner", "Deep cleans whole rooms at home with hot water and solution.", "upright carpet cleaner machine"]
+  ],
+  "interior-painting": [
+    ["Painter's tape", "Gives clean lines along trim and ceilings.", "painters tape"],
+    ["Paint roller kit", "Roller frame, covers and tray for walls.", "paint roller kit tray"],
+    ["Angled sash brush", "Cuts in neat edges at corners and trim.", "angled sash paint brush 2.5 inch"],
+    ["Drop cloths", "Canvas cloths protect floors and stay put better than plastic.", "canvas drop cloth painting"]
+  ],
+  "tree-trimming": [
+    ["Pole saw", "Cuts branches up to about 15 feet without a ladder.", "cordless pole saw"],
+    ["Bypass loppers", "Clean cuts on branches up to about 2 inches thick.", "bypass loppers"],
+    ["Pruning saw", "A folding saw for limbs too thick for loppers.", "folding pruning saw"],
+    ["Safety glasses", "Keep sawdust and twigs out of your eyes.", "safety glasses"]
   ]
 };

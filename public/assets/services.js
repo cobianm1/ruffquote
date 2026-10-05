@@ -415,6 +415,178 @@ const SERVICES = [
       ["Should I hire a handyman or a licensed pro?", "Simple swaps are fine for a handyman. New wiring, gas lines or moving plumbing usually need a licensed electrician or plumber, depending on your state."],
       ["How do I save money?", "Make a list and book one visit for several small jobs. You pay the minimum once instead of each time."]
     ]
+  },
+  {
+    slug: "junk-removal",
+    name: "Junk Removal",
+    noun: "junk removal",
+    pro: "junk hauler",
+    // Rates are for a two-person crew with a truck, combined per hour.
+    lowRate: 70, highRate: 130, minCharge: 100,
+    fields: [
+      { id: "load", label: "How much junk", type: "chips", default: 2,
+        options: ["A few items", "1/4 truck", "1/2 truck", "3/4 truck", "Full truck"] },
+      { id: "heavy", label: "Heavy or special items", type: "number", unit: "items", default: 0, min: 0, max: 10, step: 1,
+        help: "Appliances, mattresses, TVs, tires or pianos. These often carry extra disposal fees." },
+      { id: "access", label: "Where it is", type: "chips", default: 1,
+        options: ["Curb or driveway", "Garage or ground floor", "Upstairs, basement or long carry"] }
+    ],
+    estimate(v) {
+      const hrs = [0.75, 1.1, 1.6, 2.2, 2.75][v.load] * [0.85, 1, 1.35][v.access] + v.heavy * 0.2;
+      const fees = [35, 65, 105, 150, 190][v.load] + v.heavy * 25;
+      return { hours: hrs, supplies: fees };
+    },
+    includes: v => "Loading by a two-person crew, hauling, and dump or recycling fees" + (v.heavy ? ", plus disposal of heavy or special items" : ""),
+    presets: [
+      ["A few items", "Ground floor", { load: 0, heavy: 0, access: 1 }],
+      ["Single appliance", "Ground floor", { load: 0, heavy: 1, access: 1 }],
+      ["1/4 truck", "Ground floor", { load: 1, heavy: 0, access: 1 }],
+      ["1/2 truck", "Ground floor", { load: 2, heavy: 0, access: 1 }],
+      ["3/4 truck", "Ground floor", { load: 3, heavy: 0, access: 1 }],
+      ["Full truck", "Ground floor", { load: 4, heavy: 0, access: 1 }],
+      ["Full truck", "Basement or upstairs", { load: 4, heavy: 0, access: 2 }]
+    ],
+    factors: [
+      "Volume. Most haulers price by how much of the truck your junk fills.",
+      "Dump fees. Landfill and transfer station fees vary a lot by city and are built into the price.",
+      "Special items. Fridges, mattresses, tires and TVs often cost extra to recycle.",
+      "Access. Stairs, basements and long carries take more time and effort."
+    ],
+    faq: [
+      ["How do I know how full the truck will be?", "A full truck is roughly a one-car garage stacked waist high. Many haulers will look at photos or your pile and quote on site before loading."],
+      ["Is junk removal cheaper if I put things at the curb?", "Usually yes. Curbside pickups load faster, and some haulers offer a lower price for them."]
+    ]
+  },
+  {
+    slug: "carpet-cleaning",
+    name: "Carpet Cleaning",
+    noun: "carpet cleaning",
+    pro: "carpet cleaner",
+    lowRate: 45, highRate: 85, minCharge: 120,
+    fields: [
+      { id: "rooms", label: "Rooms", type: "number", unit: "rooms", default: 3, min: 1, max: 15, step: 1,
+        help: "Count each carpeted room. A hallway or large open area of about 200 sq ft counts as one room." },
+      { id: "stairs", label: "Staircases", type: "number", unit: "flights", default: 0, min: 0, max: 4, step: 1,
+        help: "A flight is about 12 to 14 carpeted steps." },
+      { id: "treat", label: "Stains", type: "chips", default: 0,
+        options: ["Normal soil", "Some spots and stains", "Pet urine or odor"] }
+    ],
+    estimate(v) {
+      const k = [1, 1.2, 1.45][v.treat];
+      const hrs = 0.5 + (v.rooms * 0.45 + v.stairs * 0.5) * k;
+      const sup = 10 + v.rooms * 4 + v.stairs * 3 + v.rooms * [0, 4, 12][v.treat];
+      return { hours: hrs, supplies: sup };
+    },
+    includes: v => "Pre-treat, hot water extraction and grooming of the carpet" + ["", ", with spot treatment on stains", ", with enzyme treatment for pet urine and odor"][v.treat] + (v.stairs ? ", stairs cleaned by hand tool" : ""),
+    presets: [
+      ["1 room", "Normal soil", { rooms: 1, stairs: 0, treat: 0 }],
+      ["3 rooms", "Normal soil", { rooms: 3, stairs: 0, treat: 0 }],
+      ["3 rooms and stairs", "Normal soil", { rooms: 3, stairs: 1, treat: 0 }],
+      ["5 rooms", "Normal soil", { rooms: 5, stairs: 0, treat: 0 }],
+      ["5 rooms and stairs", "Some stains", { rooms: 5, stairs: 1, treat: 1 }],
+      ["3 rooms", "Pet urine or odor", { rooms: 3, stairs: 0, treat: 2 }]
+    ],
+    factors: [
+      "Number of rooms. Most companies price per room, with a minimum for small jobs.",
+      "Stairs. Steps are cleaned with a hand tool and are usually priced per step or per flight.",
+      "Stains and pets. Pet urine needs enzyme treatment and sometimes subfloor work.",
+      "Moving furniture. Many cleaners charge extra to move beds, sofas and heavy pieces."
+    ],
+    faq: [
+      ["How long does carpet take to dry?", "Usually 6 to 12 hours after hot water extraction. Running fans and the AC speeds it up."],
+      ["Steam cleaning or dry cleaning?", "Hot water extraction, often called steam cleaning, is what most carpet makers recommend. Low-moisture methods dry faster but clean less deeply."]
+    ]
+  },
+  {
+    slug: "interior-painting",
+    name: "Interior Painting",
+    noun: "interior painting",
+    pro: "painter",
+    lowRate: 40, highRate: 75, minCharge: 250,
+    fields: [
+      { id: "rooms", label: "Rooms", type: "number", unit: "rooms", default: 1, min: 1, max: 15, step: 1 },
+      { id: "size", label: "Room size", type: "chips", default: 1,
+        options: ["Small (10x10)", "Medium (12x12)", "Large (14x16)", "Very large (20x20)"] },
+      { id: "ceiling", label: "Ceilings", type: "chips", default: 0,
+        options: ["Walls only", "Walls and ceiling"] },
+      { id: "trim", label: "Trim and doors", type: "chips", default: 0,
+        options: ["No trim", "Baseboards and window trim", "Trim and doors"] },
+      { id: "cond", label: "Walls and color", type: "chips", default: 0,
+        options: ["Same color, good walls", "Color change", "Color change and wall repairs"] }
+    ],
+    estimate(v) {
+      const s = v.size;
+      const k = [1, 1.25, 1.45][v.cond];
+      const perRoom = [4.5, 5.5, 7, 9.5][s] * k
+        + (v.ceiling ? [1.5, 2, 2.75, 4][s] : 0)
+        + [0, [1.5, 2, 2.5, 3.25][s], [2.5, 3, 3.5, 4.25][s]][v.trim];
+      const gallons = [1.5, 2, 2.5, 3.5][s] * (v.cond ? 1.5 : 1)
+        + (v.ceiling ? [0.75, 1, 1.25, 2][s] : 0)
+        + (v.trim ? [0.25, 0.25, 0.5, 0.5][s] * v.trim : 0);
+      const sup = v.rooms * (gallons * 45 + 20 + (v.cond === 2 ? 15 : 0)) + 10;
+      return { hours: 0.5 + v.rooms * perRoom, supplies: sup };
+    },
+    includes: v => "Furniture moved and covered, prep, and two coats on the walls" + (v.ceiling ? ", ceiling painted" : "") + ["", ", baseboards and window trim painted", ", trim and doors painted"][v.trim] + ", with mid-grade paint included",
+    presets: [
+      ["1 small room", "Walls only", { rooms: 1, size: 0, ceiling: 0, trim: 0, cond: 0 }],
+      ["1 medium room", "Walls only", { rooms: 1, size: 1, ceiling: 0, trim: 0, cond: 0 }],
+      ["1 medium room", "Walls, ceiling and trim", { rooms: 1, size: 1, ceiling: 1, trim: 1, cond: 0 }],
+      ["1 large room", "Walls, color change", { rooms: 1, size: 2, ceiling: 0, trim: 0, cond: 1 }],
+      ["3 medium rooms", "Walls only", { rooms: 3, size: 1, ceiling: 0, trim: 0, cond: 0 }],
+      ["3 medium rooms", "Walls, ceiling and trim", { rooms: 3, size: 1, ceiling: 1, trim: 1, cond: 0 }]
+    ],
+    factors: [
+      "Wall area. Bigger rooms and tall ceilings take more paint and time.",
+      "Prep. Patching holes, sanding and caulking can take as long as painting.",
+      "Color change. Going from dark to light, or light to dark, often needs primer or a third coat.",
+      "Trim, doors and ceilings. Detail work with a brush is slower than rolling walls."
+    ],
+    faq: [
+      ["Is paint included in the price?", "Most painters include mid-grade paint and supplies. Premium paint or many colors in one room can add to the cost."],
+      ["How long does it take to paint a room?", "A pro can usually paint the walls of an average bedroom in one day, including prep and two coats."]
+    ]
+  },
+  {
+    slug: "tree-trimming",
+    name: "Tree Trimming",
+    noun: "tree trimming",
+    pro: "tree trimmer",
+    // Rates are for a two- or three-person crew with a chipper, combined per hour.
+    lowRate: 75, highRate: 140, minCharge: 150,
+    fields: [
+      { id: "trees", label: "Number of trees", type: "number", unit: "trees", default: 1, min: 1, max: 20, step: 1 },
+      { id: "height", label: "Tree height", type: "chips", default: 1,
+        options: ["Small (under 15 ft)", "Medium (15 to 30 ft)", "Large (30 to 60 ft)", "Very large (60 ft or more)"] },
+      { id: "near", label: "Location", type: "chips", default: 0,
+        options: ["Open yard", "Over the house or roof", "Near power lines"] },
+      { id: "haul", label: "Debris", type: "chips", default: 0,
+        options: ["Chip and haul away", "Leave it cut and stacked"] }
+    ],
+    estimate(v) {
+      const h = v.height;
+      const each = [0.75, 2, 4, 7][h] * [1, 1.3, 1.5][v.near] * (v.haul ? 1 : 1.15);
+      const sup = v.trees * ([10, 25, 50, 100][h] + (v.haul ? 0 : [15, 35, 70, 120][h]));
+      return { hours: 0.5 + v.trees * each, supplies: sup };
+    },
+    includes: v => "Dead, broken and crossing branches pruned, with clearance cut from the house and walkways" + (v.haul ? ", branches left cut and stacked" : ", branches chipped and hauled away"),
+    presets: [
+      ["1 small tree", "Open yard", { trees: 1, height: 0, near: 0, haul: 0 }],
+      ["1 medium tree", "Open yard", { trees: 1, height: 1, near: 0, haul: 0 }],
+      ["1 medium tree", "Over the house", { trees: 1, height: 1, near: 1, haul: 0 }],
+      ["1 large tree", "Open yard", { trees: 1, height: 2, near: 0, haul: 0 }],
+      ["1 very large tree", "Open yard", { trees: 1, height: 3, near: 0, haul: 0 }],
+      ["3 medium trees", "Open yard", { trees: 3, height: 1, near: 0, haul: 0 }]
+    ],
+    factors: [
+      "Height. Taller trees need climbing gear or a bucket truck and take much longer.",
+      "Location. Limbs over a roof or near power lines must be roped down piece by piece.",
+      "Cleanup. Chipping and hauling debris adds time, fuel and dump fees.",
+      "Tree health. Dead or storm-damaged trees can be riskier and slower to work on."
+    ],
+    faq: [
+      ["When is the best time to trim trees?", "Late winter, while trees are dormant, is best for most species. Dead or hazardous limbs can be removed any time."],
+      ["Who trims branches near power lines?", "Lines running pole to pole are usually the utility's job, often for free. The line from the pole to your house is often the homeowner's. Call your utility first."]
+    ]
   }
 ];
 

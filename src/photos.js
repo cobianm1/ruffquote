@@ -12,5 +12,9 @@ module.exports = {
   "christmas-light-installation": [{ url: U("1664289342468-fa99588e60b8"), alt: "House exterior lit with Christmas lights" }, { url: U("1642184665676-636ffd0c3afe"), alt: "House covered in Christmas lights" }],
   "mobile-mechanic": [{ url: U("1615906655593-ad0386982a0f"), alt: "Mechanic working on a car engine" }, { url: U("1645445522156-9ac06bc7a767"), alt: "Man working on a tire in a garage" }],
   "drain-cleaning": [{ url: U("1749532125405-70950966b0e5"), alt: "Plumber working on plumbing in a bathroom" }, { url: U("1676210133055-eab6ef033ce3"), alt: "Man working on pipes under a sink" }],
-  "handyman": [{ url: U("1505798577917-a65157d3320a"), alt: "Man cutting wood with a miter saw" }, { url: U("1615974679600-665fb9468c4f"), alt: "Person holding a tape measure" }]
+  "handyman": [{ url: U("1505798577917-a65157d3320a"), alt: "Man cutting wood with a miter saw" }, { url: U("1615974679600-665fb9468c4f"), alt: "Person holding a tape measure" }],
+  "junk-removal": [{ url: U("1722927621756-6030e4191867"), alt: "Pile of junk in front of a garage" }, { url: U("1709831917664-804b57448953"), alt: "Garage filled with clutter and old tools" }],
+  "carpet-cleaning": [{ url: U("1742483359033-13315b247c74"), alt: "Person in a protective suit cleaning a carpet" }, { url: U("1527515637462-cff94eecc1ac"), alt: "Person vacuuming a carpet" }],
+  "interior-painting": [{ url: U("1688372199140-cade7ae820fe"), alt: "Man painting a wall with yellow paint" }, { url: U("1562259949-e8e7689d7828"), alt: "Paint roller applying blue paint to a white wall" }],
+  "tree-trimming": [{ url: U("1754322449185-31f56117ed87"), alt: "Arborist cutting a tree branch" }, { url: U("1754321902809-5c21cbc67228"), alt: "Arborist pruning a tree's branches" }]
 };
