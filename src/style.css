@@ -91,7 +91,7 @@ textarea{width:100%;min-height:130px;font:13px/1.5 ui-monospace,Menlo,monospace;
 .pick{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .pick select{flex:1 1 220px;font:500 16px var(--body);padding:13px 14px;border-radius:10px;border:0;background:#fff;color:#1b2428}
 .hero-pro{color:#fff;font-weight:600;font-size:15px}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.sr{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;border:0!important;overflow:hidden;clip:rect(0 0 0 0)}
 .perks{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:-12px}
 .perks div{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:14px 16px;display:grid}
 .perks b{font:700 21px var(--display)}
@@ -187,6 +187,16 @@ details p{margin:8px 0 0}
 .quickshop small{flex-basis:100%;color:var(--muted);font-size:12px}
 .quickshop a.more{background:none;border:0;color:var(--accent);padding:5px 2px;text-decoration:underline}
 @media (prefers-color-scheme: dark){.quickshop a{background:#3a2e10;color:#f6d77e;border-color:#6b5420}}
+.listed{display:grid;gap:28px;align-items:start}
+@media(min-width:860px){.listed{grid-template-columns:5fr 6fr}}
+.listform input:not([type=checkbox]),.listform select,.listform textarea{width:100%;font:500 16px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:11px 12px}
+.listform textarea{min-height:0;font-family:var(--body)}
+.listform input:focus,.listform select:focus,.listform textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.listform .two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.listform .btn-lg{justify-self:start}
+.tick{display:flex;gap:10px;align-items:center;font-weight:600}
+.tick input{width:20px;height:20px;accent-color:var(--accent)}
+.formerr{margin:0;background:#fde8e4;color:#8a2a14;border-radius:8px;padding:10px 12px;font-weight:600}
 /* Footer */
 .site-foot{background:#0f2329;color:#b8c9ce;margin-top:20px}
 .site-foot a{color:#d5e3e7}

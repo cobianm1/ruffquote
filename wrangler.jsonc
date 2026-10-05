@@ -1,10 +1,16 @@
 {
   "name": "ruffquote",
+  "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./public",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
   },
+  // Created automatically on first deploy
+  "kv_namespaces": [
+    { "binding": "SIGNUPS" }
+  ],
   "routes": [
     { "pattern": "ruffquote.com", "custom_domain": true },
     { "pattern": "www.ruffquote.com", "custom_domain": true }

@@ -113,7 +113,7 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script
 <header class="site-top">
   <div class="wrap top">
     <a class="brand" href="/" aria-label="RuffQuote home">${LOGO}<span>Ruff<b>Quote</b></span></a>
-    <nav aria-label="Main"><a href="/home-services/">Home services</a><a href="/car-services/">Car services</a><a href="/cost-guides/">Cost guides</a><a class="btn btn-sm" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></nav>
+    <nav aria-label="Main"><a href="/home-services/">Home services</a><a href="/car-services/">Car services</a><a href="/cost-guides/">Cost guides</a><a class="btn btn-sm" href="/get-listed/">Get listed</a></nav>
   </div>
 </header>
 <main class="page">
@@ -172,7 +172,7 @@ function servicePage(s) {
       <div class="cta">
         <p><b>Local ${proPlural} near you</b></p>
         <p class="muted">We're adding trusted local ${proPlural} soon. Are you one? Get listed so customers here can find you.</p>
-        <a class="linkbtn" href="#pros" data-go="pros">See the ${s.pro} price tool</a>
+        <a class="linkbtn" href="/get-listed/?service=${s.slug}">Get listed as a ${s.pro}</a>
       </div>
       ${gearQuick(s.slug)}
     </div>
@@ -227,7 +227,7 @@ function servicePage(s) {
       <textarea id="out" readonly aria-label="Price list text"></textarea>
       <div class="cta">
         <p><b>Get customers from RuffQuote.</b> Homeowners use this site to check ${work} prices. Get listed and show up next to their results.</p>
-        <a class="linkbtn" href="mailto:${EMAIL}?subject=${encodeURIComponent("List my " + s.name.toLowerCase() + " business")}">Email us to get listed: ${EMAIL}</a>
+        <a class="btn" href="/get-listed/?service=${s.slug}">Get listed free</a>
       </div>
       ${gearQuick(s.slug, PRO_GEAR, "progear", "<b>Gear up for the job.</b> Pro picks on Amazon:")}
     </div>
@@ -292,7 +292,7 @@ function homePage() {
     <h2 class="h2-lg">Not sure what to charge?</h2>
     <p>Every calculator has a free tool for detailers, cleaners, mechanics and handymen. Enter your hourly rate and costs, and get a ready-to-post price list.</p>
     <p>Want homeowners here to find you? Featured listings are coming to each service page.</p>
-    <div class="actions"><a class="btn btn-light" href="/car-detailing/#pros">Try the pro price tool</a><a class="btn btn-ghost" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></div>
+    <div class="actions"><a class="btn btn-light" href="/car-detailing/#pros">Try the pro price tool</a><a class="btn btn-ghost" href="/get-listed/">Get listed</a></div>
   </div>
 </section>
 ${GUIDES.length ? `<section id="guides"><div class="eyebrow">Cost guides</div><h2 class="h2-lg">Popular price questions</h2><ul class="guidelist">${["tv-mounting-cost", "oil-change-cost", "junk-removal-cost", "cost-to-paint-a-room", "main-sewer-line-cleaning-cost", "christmas-light-installation-cost", "deep-cleaning-cost", "brake-pad-replacement-cost"].map(x => GUIDES.find(g => g.slug === x)).filter(Boolean).map(g => `<li><a href="/${g.service}/${g.slug}/">How much does ${esc(g.job.replace(/^(a|an) /, ""))} cost?</a></li>`).join("")}</ul><p><a class="seeall" href="/cost-guides/">See all ${GUIDES.length} cost guides →</a></p></section>` : ""}
@@ -402,6 +402,50 @@ ${CATS.map(c => `<section class="group"><h2 class="group-h">${c.name}</h2>${c.sl
   return layout({ title: "Cost Guides for Home and Car Services | RuffQuote", description: "How much do common home and car jobs cost? Price tables, what's included and ways to save for junk removal, painting, oil changes, TV mounting and more.", urlPath: "/cost-guides/", body });
 }
 
+function getListedPage() {
+  const body = `
+<section class="listed">
+  <div class="listed-intro">
+    <div class="eyebrow">For local pros</div>
+    <h1>Get your business in front of customers</h1>
+    <p class="lede">Homeowners use RuffQuote to check prices before they hire. Add your business and we'll list you on the pages for your service and area.</p>
+    <ul class="checks">
+      <li>Free basic listing. No account or credit card.</li>
+      <li>Takes about 30 seconds.</li>
+      <li>Featured spots at the top of results are coming soon. Tick the box if you want first dibs.</li>
+    </ul>
+  </div>
+  <form class="card listform" method="post" action="/api/listing">
+    <p class="formerr" id="formerr" role="alert" hidden></p>
+    <div class="field"><label class="label" for="business">Business name *</label><input id="business" name="business" required maxlength="120" autocomplete="organization"></div>
+    <div class="field"><label class="label" for="service">Service *</label><select id="service" name="service" required><option value="">Choose one</option>${CATS.map(c => `<optgroup label="${c.name}">${c.slugs.map(x => `<option value="${x}">${bySlug[x].name}</option>`).join("")}</optgroup>`).join("")}<option value="other">Something else</option></select></div>
+    <div class="field"><label class="label" for="area">City or ZIP you serve *</label><input id="area" name="area" required maxlength="80" autocomplete="postal-code"></div>
+    <div class="two">
+      <div class="field"><label class="label" for="phone">Phone</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div>
+      <div class="field"><label class="label" for="email">Email</label><input id="email" name="email" type="email" maxlength="120" autocomplete="email"></div>
+    </div>
+    <small class="muted">Add a phone or email (or both) so customers can reach you.</small>
+    <div class="two">
+      <div class="field"><label class="label" for="name">Your name</label><input id="name" name="name" maxlength="80" autocomplete="name"></div>
+      <div class="field"><label class="label" for="website">Website or Facebook page</label><input id="website" name="website" maxlength="200" inputmode="url"></div>
+    </div>
+    <label class="tick"><input type="checkbox" name="plan" value="featured"> I'm interested in a featured spot</label>
+    <div class="field"><label class="label" for="notes">Anything else? (optional)</label><textarea id="notes" name="notes" maxlength="1000" rows="3"></textarea></div>
+    <input type="text" name="company" class="sr" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input type="hidden" name="t" id="t">
+    <button class="btn btn-lg" type="submit">Get listed free</button>
+    <small class="muted">By sending this you agree that we can show your business details on RuffQuote and contact you about your listing. See our <a href="/privacy/">privacy policy</a>.</small>
+  </form>
+</section>
+<script>
+(function(){var q=new URLSearchParams(location.search),s=q.get("service"),e=q.get("error");
+document.getElementById("t").value=Date.now();
+if(s){var o=document.querySelector('#service option[value="'+s.replace(/[^a-z-]/g,"")+'"]');if(o)o.selected=true;}
+if(e){var p=document.getElementById("formerr");p.textContent=e;p.hidden=false;}})();
+</script>`;
+  return layout({ title: "Get Listed: Free Listing for Local Service Pros | RuffQuote", description: "List your cleaning, lawn, detailing, handyman or repair business on RuffQuote for free and reach homeowners who are checking prices before they hire.", urlPath: "/get-listed/", body });
+}
+
 function simplePage(urlPath, title, description, html) {
   return layout({ title, description, urlPath, body: `<section class="prose">${html}</section>` });
 }
@@ -412,13 +456,14 @@ const pages = {
 <h1>About RuffQuote</h1>
 <p>RuffQuote helps homeowners check whether a quote is fair, and helps small service businesses set prices with confidence.</p>
 <p>Our estimates come from the typical time each job takes, the cost of supplies, and the hourly rates that newer and experienced pros charge. They're a starting point, not a quote. Your local prices may be higher or lower.</p>
-<p>Questions, corrections or want your business listed? Email <a href="mailto:${EMAIL}">${EMAIL}</a>.</p>`),
+<p>Run a service business? <a href="/get-listed/">Get listed here</a>. Questions or corrections? Email <a href="mailto:${EMAIL}">${EMAIL}</a>.</p>`),
   "privacy/index.html": simplePage("/privacy/", "Privacy Policy | RuffQuote", "How RuffQuote handles your information.", `
 <h1>Privacy policy</h1>
 <p>Last updated ${new Date().toISOString().slice(0, 10)}.</p>
 <p>RuffQuote's calculators run in your browser. We don't ask for your name, address or payment details, and the numbers you enter aren't sent to us.</p>
 <p>We may use privacy-friendly analytics to count visits, and may show ads from third parties such as Google. Those providers may use cookies to show relevant ads. You can manage ad personalization at <a href="https://adssettings.google.com">adssettings.google.com</a>.</p>
 <p>Some links go to Amazon. As an Amazon Associate, RuffQuote earns from qualifying purchases. Amazon may set cookies when you click those links.</p>
+<p>If you send us your business details through the Get listed form, we store them to set up your listing and contact you about it. We don't sell them.</p>
 <p>If you email us, we use your email only to reply. Contact: <a href="mailto:${EMAIL}">${EMAIL}</a>.</p>`),
   "404.html": simplePage("/404", "Page not found | RuffQuote", "This page doesn't exist.", `
 <h1>Page not found</h1><p>That page doesn't exist. <a href="/">Go to the home page</a> to pick a service.</p>`)
@@ -427,6 +472,11 @@ SERVICES.forEach(s => { pages[`${s.slug}/index.html`] = servicePage(s); });
 GUIDES.forEach(g => { pages[`${g.service}/${g.slug}/index.html`] = guidePage(g); });
 CATS.forEach(c => { pages[`${c.path.slice(1)}index.html`] = categoryPage(c); });
 if (GUIDES.length) pages["cost-guides/index.html"] = guidesIndexPage();
+pages["get-listed/index.html"] = getListedPage();
+pages["get-listed/thanks/index.html"] = simplePage("/get-listed/thanks/", "Thanks! | RuffQuote", "Your listing request was received.", `
+<h1>Thanks, you're on the list!</h1>
+<p>We got your business details. We'll add your listing to the pages for your service and area, and reach out if we need anything.</p>
+<p><a href="/">Back to RuffQuote</a></p>`);
 
 fs.rmSync(OUT, { recursive: true, force: true });
 for (const [file, html] of Object.entries(pages)) {
@@ -438,7 +488,7 @@ fs.mkdirSync(path.join(OUT, "assets"), { recursive: true });
 for (const f of ["services.js", "app.js", "style.css"]) fs.copyFileSync(path.join(__dirname, "src", f), path.join(OUT, "assets", f));
 fs.writeFileSync(path.join(OUT, "favicon.svg"), FAVICON);
 fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
-const urls = ["/", ...CATS.map(c => c.path), "/cost-guides/", ...SERVICES.map(s => `/${s.slug}/`), ...GUIDES.map(g => `/${g.service}/${g.slug}/`), "/about/", "/privacy/"];
+const urls = ["/", ...CATS.map(c => c.path), "/cost-guides/", "/get-listed/", ...SERVICES.map(s => `/${s.slug}/`), ...GUIDES.map(g => `/${g.service}/${g.slug}/`), "/about/", "/privacy/"];
 fs.writeFileSync(path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${SITE}${u}</loc></url>`).join("\n")}\n</urlset>\n`);
 console.log(`Built ${Object.keys(pages).length} pages into public/`);
