@@ -7,8 +7,8 @@ const SITE = "https://ruffquote.com";
 const EMAIL = "hello@ruffquote.com";
 const OUT = path.join(__dirname, "public");
 
-const LOGO = `<svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><path fill="var(--accent)" d="M7 6c2 0 3 2 3.5 4h11C22 8 23 6 25 6c2.5 0 3 4 2 7-.6 1.8-1.6 2.6-2.4 3 .3.9.4 1.9.4 3 0 5.5-4.5 9-9 9s-9-3.5-9-9c0-1.1.1-2.1.4-3-.8-.4-1.8-1.2-2.4-3-1-3-.5-7 2-7z"/><circle cx="12.5" cy="18" r="1.6" fill="var(--bg)"/><circle cx="19.5" cy="18" r="1.6" fill="var(--bg)"/><ellipse cx="16" cy="22.5" rx="2.2" ry="1.5" fill="var(--bg)"/></svg>`;
-const FAVICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="#0b6e8a" d="M7 6c2 0 3 2 3.5 4h11C22 8 23 6 25 6c2.5 0 3 4 2 7-.6 1.8-1.6 2.6-2.4 3 .3.9.4 1.9.4 3 0 5.5-4.5 9-9 9s-9-3.5-9-9c0-1.1.1-2.1.4-3-.8-.4-1.8-1.2-2.4-3-1-3-.5-7 2-7z"/><circle cx="12.5" cy="18" r="1.6" fill="#fff"/><circle cx="19.5" cy="18" r="1.6" fill="#fff"/><ellipse cx="16" cy="22.5" rx="2.2" ry="1.5" fill="#fff"/></svg>`;
+const LOGO = `<svg viewBox="0 0 64 64" width="40" height="40" aria-hidden="true"><path fill="#084f63" d="M17 13c-6-1-11 4-12 12-1 7 1 14 5 16 3 1 6-2 7-6l3-14c0-4-1-7-3-8z"/><path fill="#084f63" d="M47 13c6-1 11 4 12 12 1 7-1 14-5 16-3 1-6-2-7-6l-3-14c0-4 1-7 3-8z"/><ellipse cx="32" cy="32" rx="17" ry="17.5" fill="#0b6e8a"/><ellipse cx="32" cy="42" rx="10.5" ry="8" fill="#ffffff"/><circle cx="24.5" cy="29" r="2.7" fill="#1b2428"/><circle cx="25.4" cy="28.1" r=".9" fill="#fff"/><circle cx="39.5" cy="29" r="2.7" fill="#1b2428"/><circle cx="40.4" cy="28.1" r=".9" fill="#fff"/><path fill="#f28b9b" d="M29.5 44.5h5v2.5a2.5 2.5 0 0 1-5 0z"/><ellipse cx="32" cy="37.6" rx="3.6" ry="2.6" fill="#1b2428"/><path d="M32 40v3.2M32 43.2c-1 1.4-3.2 1.6-4.2.3M32 43.2c1 1.4 3.2 1.6 4.2.3" stroke="#1b2428" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>`;
+const FAVICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="#084f63" d="M17 13c-6-1-11 4-12 12-1 7 1 14 5 16 3 1 6-2 7-6l3-14c0-4-1-7-3-8z"/><path fill="#084f63" d="M47 13c6-1 11 4 12 12 1 7-1 14-5 16-3 1-6-2-7-6l-3-14c0-4 1-7 3-8z"/><ellipse cx="32" cy="32" rx="17" ry="17.5" fill="#0b6e8a"/><ellipse cx="32" cy="42" rx="10.5" ry="8" fill="#ffffff"/><circle cx="24.5" cy="29" r="2.7" fill="#1b2428"/><circle cx="25.4" cy="28.1" r=".9" fill="#fff"/><circle cx="39.5" cy="29" r="2.7" fill="#1b2428"/><circle cx="40.4" cy="28.1" r=".9" fill="#fff"/><path fill="#f28b9b" d="M29.5 44.5h5v2.5a2.5 2.5 0 0 1-5 0z"/><ellipse cx="32" cy="37.6" rx="3.6" ry="2.6" fill="#1b2428"/><path d="M32 40v3.2M32 43.2c-1 1.4-3.2 1.6-4.2.3M32 43.2c1 1.4 3.2 1.6 4.2.3" stroke="#1b2428" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>`;
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -52,6 +52,7 @@ ${service ? `<script src="/assets/services.js"></script><script src="/assets/app
 }
 
 function servicePage(s) {
+  const work = s.work || s.noun;
   const proPlural = s.pro + "s";
   const body = `
 <div class="tabs" role="tablist">
@@ -82,7 +83,7 @@ function servicePage(s) {
     </div>
   </div>
   <div class="prose">
-    <h2>What affects the price of ${s.noun}</h2>
+    <h2>What affects the price of ${work}</h2>
     <ul>${s.factors.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
     <p>The low end of the range is a newer ${s.pro} at about $${s.lowRate} an hour. The high end is an experienced pro at about $${s.highRate} an hour who travels to you.${s.minCharge ? ` Many ${proPlural} have a minimum charge of around $${s.minCharge}.` : ""} Prices are higher in big cities.</p>
   </div>
@@ -95,7 +96,7 @@ function servicePage(s) {
 <section id="p-pro" class="panel" role="tabpanel" aria-labelledby="t-pro" hidden>
   <div>
     <div class="eyebrow">Free pricing tool for ${proPlural}</div>
-    <h2 style="font-size:clamp(32px,6vw,48px);line-height:1.05">How much should I charge for ${s.noun}?</h2>
+    <h2 style="font-size:clamp(32px,6vw,48px);line-height:1.05">How much should I charge for ${work}?</h2>
     <p class="lede">Enter what your time is worth and your costs. You get a price list you can paste into a flyer, Facebook post or booking page.</p>
   </div>
   <div class="grid">
@@ -121,8 +122,8 @@ function servicePage(s) {
       <div class="actions"><button type="button" class="btn" id="copy">Copy price list</button><span id="copied" class="muted" role="status"></span></div>
       <textarea id="out" readonly aria-label="Price list text"></textarea>
       <div class="cta">
-        <p><b>Get customers from RuffQuote.</b> Homeowners use this site to check ${s.noun} prices. Get listed and show up next to their results.</p>
-        <a class="linkbtn" href="mailto:${EMAIL}?subject=${encodeURIComponent("List my " + s.noun + " business")}">Email us to get listed: ${EMAIL}</a>
+        <p><b>Get customers from RuffQuote.</b> Homeowners use this site to check ${work} prices. Get listed and show up next to their results.</p>
+        <a class="linkbtn" href="mailto:${EMAIL}?subject=${encodeURIComponent("List my " + s.name.toLowerCase() + " business")}">Email us to get listed: ${EMAIL}</a>
       </div>
     </div>
   </div>
@@ -134,7 +135,7 @@ function servicePage(s) {
   </div>
 </section>`;
   const title = `${s.name} Cost Calculator: What Should You Pay? | RuffQuote`;
-  const description = `Free ${s.noun} cost calculator. See a fair price range for your job, what most people pay, and what affects the price. ${s.name} pros can build a price list too.`;
+  const description = `Free ${s.name.toLowerCase()} cost calculator. See a fair price range for your job, what most people pay, and what affects the price. ${s.name} pros can build a price list too.`;
   const jsonld = {
     "@context": "https://schema.org", "@type": "FAQPage",
     mainEntity: s.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } }))
@@ -147,7 +148,7 @@ function homePage() {
 <section>
   <div class="eyebrow">Fair prices for home and car services</div>
   <h1>Know the going rate before you book or bid.</h1>
-  <p class="lede">Free calculators that show what jobs like gutter cleaning, pressure washing and car detailing should cost. Homeowners get a fair price range. Pros get a price list they can use today.</p>
+  <p class="lede">Free calculators that show what jobs like gutter cleaning, oil changes, drain snaking and TV mounting should cost. Homeowners get a fair price range. Pros get a price list they can use today.</p>
 </section>
 <section id="services">
   <h2>Pick a service</h2>
@@ -162,7 +163,7 @@ function homePage() {
 </section>`;
   return layout({
     title: "RuffQuote: Fair Prices for Home and Car Services",
-    description: "Free calculators that show what home and car services should cost, from gutter cleaning and pressure washing to car detailing and Christmas light installation.",
+    description: "Free calculators that show what home, car and handyman services should cost, from gutter cleaning and oil changes to drain cleaning and TV mounting.",
     urlPath: "/", body
   });
 }

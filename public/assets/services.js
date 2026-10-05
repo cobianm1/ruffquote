@@ -301,6 +301,120 @@ const SERVICES = [
       ["When should I book?", "Book in September or October. Installers fill up fast, and November slots go first."],
       ["Do I keep the lights?", "Usually not. Most installers lease the lights, take them down after the holidays, and store them for next year."]
     ]
+  },
+  {
+    slug: "mobile-mechanic",
+    name: "Mobile Mechanic",
+    noun: "a mobile mechanic", work: "mobile mechanic work",
+    pro: "mobile mechanic",
+    lowRate: 50, highRate: 95, minCharge: 50,
+    fields: [
+      { id: "job", label: "Job", type: "chips", default: 0,
+        options: ["Oil change", "Tire rotation", "Brake pads (one axle)", "Battery replacement"] },
+      { id: "vehicle", label: "Vehicle", type: "chips", default: 0,
+        options: ["Car", "SUV, truck or van"] }
+    ],
+    estimate(v) {
+      const big = v.vehicle === 1;
+      const hrs = [0.75, 0.5, 1.5, 0.5][v.job] * (big ? 1.15 : 1);
+      const parts = [40, 0, 70, 170][v.job] * (big ? [1.3, 1, 1.25, 1.15][v.job] : 1);
+      return { hours: hrs, supplies: parts };
+    },
+    includes: v => ["Synthetic-blend oil and filter, fluid top-off, old oil disposed", "All four tires rotated and set to the right pressure", "New brake pads on one axle, rotors checked, test drive", "New battery installed and tested, old battery recycled"][v.job] + ", done in your driveway",
+    presets: [
+      ["Oil change", "Car", { job: 0, vehicle: 0 }],
+      ["Oil change", "SUV, truck or van", { job: 0, vehicle: 1 }],
+      ["Tire rotation", "Any vehicle", { job: 1, vehicle: 0 }],
+      ["Brake pads, one axle", "Car", { job: 2, vehicle: 0 }],
+      ["Brake pads, one axle", "SUV, truck or van", { job: 2, vehicle: 1 }],
+      ["Battery replacement", "Car", { job: 3, vehicle: 0 }]
+    ],
+    factors: [
+      "Parts. Oil type, brake pad quality and battery size can change the price by $50 or more.",
+      "Vehicle. Trucks and SUVs need more oil, bigger pads and heavier batteries.",
+      "Convenience. Mobile mechanics come to you, which often costs a little more than a shop.",
+      "Add-ons. Rotors, wiper blades and filters are usually extra."
+    ],
+    faq: [
+      ["Is a mobile mechanic more expensive than a shop?", "Often about the same for simple jobs. You save the trip and the wait, and many mobile mechanics have lower overhead."],
+      ["Can I supply my own parts?", "Some mechanics allow it and charge labor only, but they usually won't warranty parts they didn't provide."]
+    ]
+  },
+  {
+    slug: "drain-cleaning",
+    name: "Drain Cleaning",
+    noun: "drain cleaning",
+    pro: "plumber",
+    lowRate: 70, highRate: 130, minCharge: 125,
+    fields: [
+      { id: "job", label: "What's clogged", type: "chips", default: 0,
+        options: ["Sink or tub drain", "Toilet", "Main sewer line"] },
+      { id: "access", label: "Clean-out access", type: "chips", default: 0,
+        options: ["Easy to reach", "Hard to reach or no clean-out"] },
+      { id: "when", label: "Timing", type: "chips", default: 0,
+        options: ["Regular hours", "Evening, weekend or emergency"] }
+    ],
+    estimate(v) {
+      const hrs = ([1, 0.75, 2][v.job] + (v.access ? [0.5, 0.25, 1][v.job] : 0)) * (v.when ? 1.5 : 1);
+      return { hours: hrs, supplies: [10, 10, 40][v.job] + (v.when ? 75 : 0) };
+    },
+    includes: v => ["Drain snaked with a hand or drum auger, flow tested", "Toilet augered, or pulled and reset if needed", "Main line cabled from the clean-out, flow tested"][v.job],
+    presets: [
+      ["Sink or tub drain", "Regular hours", { job: 0, access: 0, when: 0 }],
+      ["Toilet clog", "Regular hours", { job: 1, access: 0, when: 0 }],
+      ["Main sewer line clean-out", "Easy access", { job: 2, access: 0, when: 0 }],
+      ["Main sewer line clean-out", "No clean-out", { job: 2, access: 1, when: 0 }],
+      ["Sink or tub drain", "Emergency or weekend", { job: 0, access: 0, when: 1 }]
+    ],
+    factors: [
+      "Which drain. A sink snake is quick. A main sewer line needs bigger equipment and more time.",
+      "Access. A clean-out port makes the job faster. Without one, the plumber may pull a toilet or go through the roof vent.",
+      "Timing. Nights, weekends and emergencies often cost 1.5 to 2 times more.",
+      "Extras. Camera inspections and hydro jetting are usually priced separately."
+    ],
+    faq: [
+      ["When should I call a plumber instead of using a plunger?", "If more than one drain is slow, water backs up in the tub when you flush, or the clog keeps coming back, it's likely deeper in the line."],
+      ["Is a camera inspection worth it?", "For repeat main line clogs, yes. It shows roots or broken pipe so you fix the cause instead of paying for clean-outs again."]
+    ]
+  },
+  {
+    slug: "handyman",
+    name: "Handyman",
+    noun: "a handyman", work: "handyman work",
+    pro: "handyman",
+    lowRate: 45, highRate: 85, minCharge: 75,
+    fields: [
+      { id: "job", label: "Job", type: "chips", default: 0,
+        options: ["Install a dishwasher", "Replace a light fixture", "Change high-ceiling bulbs", "Mount a TV", "Replace a ceiling fan", "Replace a faucet", "Hang shelves or pictures", "Assemble furniture"] },
+      { id: "qty", label: "How many", type: "number", unit: "items", default: 1, min: 1, max: 20, step: 1,
+        help: "For example, 3 light fixtures or 6 pictures. Customer usually supplies the item being installed." }
+    ],
+    estimate(v) {
+      const each = [2, 1, 0.15, 1, 1.5, 1.25, 0.3, 1.25][v.job];
+      const sup = [15, 5, 0, 10, 5, 10, 2, 0][v.job];
+      return { hours: 0.25 + each * v.qty, supplies: sup * v.qty };
+    },
+    includes: v => ["Old unit removed, new dishwasher connected to water, drain and power, and leveled", "Old fixture removed, new one wired and mounted", "Bulbs swapped on tall ceilings or fixtures, using the right ladder", "TV mount anchored to studs, TV hung and cables tidied", "Old fan removed, new fan assembled, wired and balanced", "Old faucet removed, new one installed with new supply lines", "Items leveled and anchored into studs or wall anchors", "Furniture unpacked, assembled and set in place, boxes broken down"][v.job] + ". Labor only, item not included",
+    presets: [
+      ["Install a dishwasher", "1 unit", { job: 0, qty: 1 }],
+      ["Replace a light fixture", "1 fixture", { job: 1, qty: 1 }],
+      ["Change high-ceiling bulbs", "Up to 6 bulbs", { job: 2, qty: 6 }],
+      ["Mount a TV", "1 TV", { job: 3, qty: 1 }],
+      ["Replace a ceiling fan", "1 fan", { job: 4, qty: 1 }],
+      ["Replace a faucet", "1 faucet", { job: 5, qty: 1 }],
+      ["Hang shelves or pictures", "Up to 5 items", { job: 6, qty: 5 }],
+      ["Assemble furniture", "1 large piece", { job: 7, qty: 1 }]
+    ],
+    factors: [
+      "The job. Simple swaps take under an hour. Appliances and fans take longer.",
+      "How many. Bundling several small jobs into one visit is the best value.",
+      "Surprises. Old wiring, rusted shutoff valves or missing studs can add time.",
+      "Minimum charge. Most handymen charge a minimum or a one-hour minimum per visit."
+    ],
+    faq: [
+      ["Should I hire a handyman or a licensed pro?", "Simple swaps are fine for a handyman. New wiring, gas lines or moving plumbing usually need a licensed electrician or plumber, depending on your state."],
+      ["How do I save money?", "Make a list and book one visit for several small jobs. You pay the minimum once instead of each time."]
+    ]
   }
 ];
 
