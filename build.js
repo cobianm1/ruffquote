@@ -12,7 +12,39 @@ const FAVICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -6 220 220
 
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-function layout({ title, description, urlPath, body, service, jsonld }) {
+const PHOTOS = require("./src/photos.js");
+const up5 = x => Math.ceil(x / 5) * 5;
+const GROUPS = [
+  ["Car", ["car-detailing", "mobile-mechanic"]],
+  ["Outside the house", ["pressure-washing", "window-cleaning", "gutter-cleaning", "lawn-mowing", "trash-can-cleaning", "christmas-light-installation"]],
+  ["Inside and repairs", ["house-cleaning", "drain-cleaning", "handyman"]]
+];
+const bySlug = Object.fromEntries(SERVICES.map(s => [s.slug, s]));
+
+// Price range for a service's default job, same formula as the browser calculator
+function typicalRange(s) {
+  const v = {};
+  s.fields.forEach(f => { v[f.id] = f.default; });
+  const est = s.estimate(v);
+  const p = (rate, over, travel) => up5(Math.max(s.minCharge || 0, (est.hours * rate + est.supplies + travel) * (1 + over / 100)));
+  return [p(s.lowRate, 10, 0), p(s.highRate, 25, 14)];
+}
+
+// Unsplash image with responsive sizes
+function photo(p, { cls = "", sizes = "100vw", eager = false } = {}) {
+  if (!p) return "";
+  const u = w => `${p.url}?auto=format&fit=crop&w=${w}&q=70`;
+  return `<img class="${cls}" src="${u(800)}" srcset="${[400, 800, 1200, 1600].map(w => `${u(w)} ${w}w`).join(", ")}" sizes="${sizes}" alt="${esc(p.alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
+}
+const pic = (slug, i) => (PHOTOS[slug] || [])[i] || (PHOTOS[slug] || [])[0];
+
+function svcCard(s) {
+  const [lo, hi] = typicalRange(s);
+  return `<a class="svc" href="/${s.slug}/">${photo(pic(s.slug, 0), { sizes: "(min-width:860px) 320px, (min-width:560px) 50vw, 100vw" })}<div class="svc-body"><h3>${s.name}</h3><span class="from">Typical job $${lo}–$${hi}</span><span class="go">Check a price →</span></div></a>`;
+}
+
+function layout({ title, description, urlPath, body, service, jsonld, image }) {
+  const og = image ? `${image.url}?auto=format&fit=crop&w=1200&h=630&q=70` : "";
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -26,7 +58,9 @@ function layout({ title, description, urlPath, body, service, jsonld }) {
 <meta property="og:url" content="${SITE}${urlPath}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RuffQuote">
+${og ? `<meta property="og:image" content="${og}">\n<meta name="twitter:card" content="summary_large_image">` : ""}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://images.unsplash.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap">
@@ -34,17 +68,25 @@ function layout({ title, description, urlPath, body, service, jsonld }) {
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ""}
 </head>
 <body${service ? ` data-service="${service}"` : ""}>
-<div class="page">
-<header class="top">
-  <a class="brand" href="/" aria-label="RuffQuote home">${LOGO}<span>Ruff<b>Quote</b></span></a>
-  <nav aria-label="Main"><a href="/#services">Services</a><a href="/about/">About</a></nav>
+<header class="site-top">
+  <div class="wrap top">
+    <a class="brand" href="/" aria-label="RuffQuote home">${LOGO}<span>Ruff<b>Quote</b></span></a>
+    <nav aria-label="Main"><a href="/#services">Services</a><a href="/about/">About</a><a class="btn btn-sm" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></nav>
+  </div>
 </header>
+<main class="page">
 ${body}
-<footer>
-  <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes.</span>
-  <span><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="mailto:${EMAIL}">${EMAIL}</a></span>
+</main>
+<footer class="site-foot">
+  <div class="wrap foot">
+    <div class="foot-brand"><a class="brand" href="/">${LOGO}<span>Ruff<b>Quote</b></span></a><p>Fair prices for home and car services. Free for homeowners and pros.</p></div>
+    ${GROUPS.map(([g, slugs]) => `<div><h4>${g}</h4><ul>${slugs.map(x => `<li><a href="/${x}/">${bySlug[x].name}</a></li>`).join("")}</ul></div>`).join("\n    ")}
+  </div>
+  <div class="wrap fine">
+    <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes. Photos from Unsplash.</span>
+    <span><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="mailto:${EMAIL}">${EMAIL}</a></span>
+  </div>
 </footer>
-</div>
 ${service ? `<script src="/assets/services.js"></script><script src="/assets/app.js"></script>` : ""}
 </body>
 </html>
@@ -54,7 +96,15 @@ ${service ? `<script src="/assets/services.js"></script><script src="/assets/app
 function servicePage(s) {
   const work = s.work || s.noun;
   const proPlural = s.pro + "s";
+  const [tlo, thi] = typicalRange(s);
+  const group = GROUPS.find(([, slugs]) => slugs.includes(s.slug));
+  const related = [...group[1], ...SERVICES.map(x => x.slug)].filter((x, i, a) => x !== s.slug && a.indexOf(x) === i).slice(0, 3);
   const body = `
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">${group[0]}</a> / <span>${s.name}</span></nav>
+<div class="banner">
+  ${photo(pic(s.slug, 0), { cls: "banner-img", sizes: "(min-width:1072px) 1040px, 100vw", eager: true })}
+  <div class="banner-text"><span class="pill">${s.name}</span><p>A typical job runs <b>$${tlo}–$${thi}</b>. Adjust the details below for your own price.</p></div>
+</div>
 <div class="tabs" role="tablist">
   <button type="button" class="tab" role="tab" id="t-cust" aria-controls="p-cust" aria-selected="true">I need ${s.noun}</button>
   <button type="button" class="tab" role="tab" id="t-pro" aria-controls="p-pro" aria-selected="false">I'm a ${s.pro}</button>
@@ -73,6 +123,8 @@ function servicePage(s) {
         <div class="eyebrow">Fair price</div>
         <div class="big" id="range"></div>
         <div class="muted" id="typical"></div>
+        <div class="rangebar" aria-hidden="true"><span></span></div>
+        <div class="rangelabels" aria-hidden="true"><span>Newer pro</span><span>Typical</span><span>Experienced pro</span></div>
       </div>
       <div class="note" id="includes"></div>
       <div class="cta">
@@ -82,14 +134,21 @@ function servicePage(s) {
       </div>
     </div>
   </div>
+  <div class="split">
   <div class="prose">
     <h2>What affects the price of ${work}</h2>
-    <ul>${s.factors.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
+    <ul class="checks">${s.factors.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
     <p>The low end of the range is a newer ${s.pro} at about $${s.lowRate} an hour. The high end is an experienced pro at about $${s.highRate} an hour who travels to you.${s.minCharge ? ` Many ${proPlural} have a minimum charge of around $${s.minCharge}.` : ""} Prices are higher in big cities.</p>
+  </div>
+  ${photo(pic(s.slug, 1), { cls: "side-img", sizes: "(min-width:860px) 420px, 100vw" })}
   </div>
   <div class="prose faq">
     <h2>Common questions</h2>
-    ${s.faq.map(([q, a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join("")}
+    ${s.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}
+  </div>
+  <div>
+    <h2>Other services people price</h2>
+    <div class="services">${related.map(x => svcCard(bySlug[x])).join("")}</div>
   </div>
 </section>
 
@@ -140,31 +199,61 @@ function servicePage(s) {
     "@context": "https://schema.org", "@type": "FAQPage",
     mainEntity: s.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } }))
   };
-  return layout({ title, description, urlPath: `/${s.slug}/`, body, service: s.slug, jsonld });
+  return layout({ title, description, urlPath: `/${s.slug}/`, body, service: s.slug, jsonld, image: pic(s.slug, 0) });
 }
 
 function homePage() {
   const body = `
-<section>
-  <div class="eyebrow">Fair prices for home and car services</div>
-  <h1>Know the going rate before you book or bid.</h1>
-  <p class="lede">Free calculators that show what jobs like gutter cleaning, oil changes, drain snaking and TV mounting should cost. Homeowners get a fair price range. Pros get a price list they can use today.</p>
+<section class="hero">
+  ${photo(pic("home", 0), { cls: "hero-img", sizes: "(min-width:1072px) 1040px, 100vw", eager: true })}
+  <div class="hero-text">
+    <div class="eyebrow">Free price checks for home and car services</div>
+    <h1>Know the fair price before you book or bid.</h1>
+    <p>See what gutter cleaning, oil changes, drain snaking, house cleaning and more should cost near you. No sign-up, no sales calls.</p>
+    <form class="pick" action="/" onsubmit="event.preventDefault();var v=this.svc.value;if(v)location.href='/'+v+'/';">
+      <label class="sr" for="svc">What do you need done?</label>
+      <select id="svc" name="svc" required><option value="">What do you need done?</option>${SERVICES.map(x => `<option value="${x.slug}">${x.name}</option>`).join("")}</select>
+      <button class="btn btn-lg" type="submit">See prices</button>
+    </form>
+    <a class="hero-pro" href="#pros">Run a service business? Build your price list →</a>
+  </div>
 </section>
-<section id="services">
-  <h2>Pick a service</h2>
-  <div class="services">
-    ${SERVICES.map(s => `<a class="svc" href="/${s.slug}/"><h3>${s.name}</h3><span>What to pay, and what to charge</span></a>`).join("\n    ")}
+<section class="perks">
+  <div><b>${SERVICES.length} services</b><span>From car detailing to drain cleaning</span></div>
+  <div><b>Price in seconds</b><span>Answer a few questions, get a fair range</span></div>
+  <div><b>100% free</b><span>No account, no phone number, no spam</span></div>
+</section>
+<section id="services" class="groups">
+  <div><div class="eyebrow">Pick a service</div><h2 class="h2-lg">What are you pricing?</h2></div>
+  ${GROUPS.map(([g, slugs]) => `<div class="group"><h3 class="group-h">${g}</h3><div class="services">${slugs.map(x => svcCard(bySlug[x])).join("")}</div></div>`).join("\n  ")}
+</section>
+<section class="steps">
+  <div><div class="eyebrow">How it works</div><h2 class="h2-lg">Check a quote in three steps</h2></div>
+  <ol>
+    <li><b>Pick your service</b><span>Choose the job, like gutter cleaning or an oil change.</span></li>
+    <li><b>Add the details</b><span>Home size, how dirty, how many windows. Whatever changes the price.</span></li>
+    <li><b>See the fair range</b><span>Compare it with the quote you got, or use it to set your budget.</span></li>
+  </ol>
+</section>
+<section id="pros" class="proband">
+  ${photo(pic("handyman", 1), { cls: "proband-img", sizes: "(min-width:860px) 480px, 100vw" })}
+  <div class="proband-text">
+    <div class="eyebrow">For pros</div>
+    <h2 class="h2-lg">Not sure what to charge?</h2>
+    <p>Every calculator has a free tool for detailers, cleaners, mechanics and handymen. Enter your hourly rate and costs, and get a ready-to-post price list.</p>
+    <p>Want homeowners here to find you? Featured listings are coming to each service page.</p>
+    <div class="actions"><a class="btn btn-light" href="/car-detailing/#pros">Try the pro price tool</a><a class="btn btn-ghost" href="mailto:${EMAIL}?subject=${encodeURIComponent("Get my business listed")}">Get listed</a></div>
   </div>
 </section>
 <section class="prose">
-  <h2>How RuffQuote works</h2>
+  <h2>Where the numbers come from</h2>
   <p>Each calculator uses the typical time a job takes, the cost of supplies, and the hourly rates local pros charge. The low end of each range is a newer pro. The high end is an experienced pro who travels to you.</p>
   <p>These are estimates to help you check a quote, not quotes themselves. Prices vary by city and by the details of each job.</p>
 </section>`;
   return layout({
     title: "RuffQuote: Fair Prices for Home and Car Services",
     description: "Free calculators that show what home, car and handyman services should cost, from gutter cleaning and oil changes to drain cleaning and TV mounting.",
-    urlPath: "/", body
+    urlPath: "/", body, image: pic("home", 0)
   });
 }
 
