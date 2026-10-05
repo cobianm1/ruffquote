@@ -39,6 +39,7 @@ function svcTile(s) {
 }
 
 const GEAR = require("./src/gear.js");
+const PRO_GEAR = require("./src/progear.js");
 const AMAZON_TAG = "ruffquote-20";
 let GUIDES = [];
 try { GUIDES = require("./src/guides.js"); } catch (e) { if (e.code !== "MODULE_NOT_FOUND") throw e; }
@@ -66,10 +67,10 @@ function svcCard(s) {
 
 // Amazon search links with our Associates tag; disclosure shown with every block
 const amazonUrl = q => `https://www.amazon.com/s?k=${encodeURIComponent(q).replace(/%20/g, "+")}&tag=${AMAZON_TAG}`;
-function gearBlock(slug, heading) {
-  const items = GEAR[slug];
+function gearBlock(slug, heading, set = GEAR, id = "gear") {
+  const items = set[slug];
   if (!items) return "";
-  return `<section class="gear" id="gear">
+  return `<section class="gear" id="${id}">
   <h2>${heading}</h2>
   <div class="gear-grid">${items.map(([name, why, q]) => `<a class="gear-item" href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener"><b>${esc(name)}</b><span>${esc(why)}</span><em>See options on Amazon →</em></a>`).join("")}</div>
   <p class="disclose">As an Amazon Associate, RuffQuote earns from qualifying purchases. It doesn't change your price.</p>
@@ -77,10 +78,10 @@ function gearBlock(slug, heading) {
 }
 
 // Small row of top Amazon picks for the price cards
-function gearQuick(slug) {
-  const items = (GEAR[slug] || []).slice(0, 3);
+function gearQuick(slug, set = GEAR, id = "gear", lead = "<b>Doing it yourself?</b> Top picks on Amazon:") {
+  const items = (set[slug] || []).slice(0, 3);
   if (!items.length) return "";
-  return `<div class="quickshop"><b>Doing it yourself?</b> Top picks on Amazon: ${items.map(([name, , q]) => `<a href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener">${esc(name)}</a>`).join("")}<a class="more" href="#gear">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>`;
+  return `<div class="quickshop">${lead} ${items.map(([name, , q]) => `<a href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener">${esc(name)}</a>`).join("")}<a class="more" href="#${id}">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>`;
 }
 
 function layout({ title, description, urlPath, body, service, jsonld, image }) {
@@ -228,8 +229,10 @@ function servicePage(s) {
         <p><b>Get customers from RuffQuote.</b> Homeowners use this site to check ${work} prices. Get listed and show up next to their results.</p>
         <a class="linkbtn" href="mailto:${EMAIL}?subject=${encodeURIComponent("List my " + s.name.toLowerCase() + " business")}">Email us to get listed: ${EMAIL}</a>
       </div>
+      ${gearQuick(s.slug, PRO_GEAR, "progear", "<b>Gear up for the job.</b> Pro picks on Amazon:")}
     </div>
   </div>
+  ${gearBlock(s.slug, `Pro tools for ${esc(work)}`, PRO_GEAR, "progear")}
   <div class="prose">
     <h2>How the prices are worked out</h2>
     <p>Each price is your hourly rate times the typical time for that job, plus supplies and driving, plus your overhead and profit, rounded up to the nearest $5.${s.minCharge ? ` Small jobs use a $${s.minCharge} minimum.` : ""} If you work faster or slower than the times shown, adjust your hourly rate.</p>
