@@ -20,11 +20,11 @@
     function render(data) {
       if (data.near && (data.near.city || data.near.zip)) where.textContent = `near ${[data.near.city, data.near.state].filter(Boolean).join(", ") || data.near.zip}`;
       if (!data.pros || !data.pros.length) { list.innerHTML = empty(); return; }
-      list.innerHTML = data.pros.map(p => `<div class="pro-card${p.featured ? " featured" : ""}">
-        <div class="pro-head"><b>${esc(p.business)}</b><small>${esc([p.city, p.state].filter(Boolean).join(", "))}${p.miles != null ? ` · ${p.miles} mi` : ""}</small></div>
+      list.innerHTML = `<div class="pros-tip"><b>Quick check before you hire</b><span>These are prices pros post themselves, so treat them as a starting quote. Take two minutes to:</span><ul><li>Look them up on Google or Facebook for reviews</li><li>Ask if they're licensed and insured for the job</li><li>Get the final price in writing before work starts</li></ul></div>` + data.pros.map(p => `<div class="pro-card${p.featured ? " featured" : ""}">
+        <div class="pro-head"><b>${esc(p.business)}</b><small>${esc([p.city, p.state].filter(Boolean).join(", "))}${p.miles != null ? ` · ${p.miles} mi` : ""}</small><span class="pro-badge">Not verified by RuffQuote</span></div>
         ${p.jobs && p.jobs.length ? `<ul class="pro-jobs">${p.jobs.slice(0, 6).map(j => `<li><span>${esc(j.name)}</span><b>$${Number(j.price).toLocaleString("en-US")}</b></li>`).join("")}</ul>` : ""}
         <div class="pro-actions">${p.phone ? `<a class="btn btn-sm" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">Call ${esc(p.phone)}</a>` : ""}${p.email ? `<a href="mailto:${esc(p.email)}">Email</a>` : ""}${p.website ? `<a href="${esc(p.website)}" target="_blank" rel="nofollow noopener">Website</a>` : ""}<button type="button" class="pro-report" data-id="${esc(p.id)}">Report</button></div>
-      </div>`).join("") + `<p class="pros-note">Prices are set by each business. RuffQuote doesn't check or guarantee them. <a href="/get-listed/?service=${esc(svc)}">Are you a ${esc(pro)}? Get listed</a></p>`;
+      </div>`).join("") + `<p class="pros-note">RuffQuote lists local pros so you can get quotes fast. We don't verify businesses or guarantee their prices or work, so the hiring choice is yours. <a href="/get-listed/?service=${esc(svc)}">Are you a ${esc(pro)}? Get listed</a></p>`;
     }
     list.addEventListener("click", e => {
       const b = e.target.closest(".pro-report");
