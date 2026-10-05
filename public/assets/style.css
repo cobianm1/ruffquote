@@ -8,8 +8,7 @@
 }
 @media (prefers-color-scheme: dark){:root{
   --bg:#121719; --surface:#1a2124; --fg:#e6ecee; --muted:#9aa9af; --line:#2d383c;
-  --accent:#4fb3d1; --accent-ink:#06222b; --soft:#18303a; color-scheme:dark}
-  .brand svg{filter:invert(1) hue-rotate(180deg)}}
+  --accent:#4fb3d1; --accent-ink:#06222b; --soft:#18303a; color-scheme:dark}}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
