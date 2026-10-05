@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lawn Mowing Cost Calculator: What Should You Pay? | RuffQuote</title>
+<meta name="description" content="Free lawn mowing cost calculator. See a fair price range for your job, what most people pay, and what affects the price. Lawn Mowing pros can build a price list too.">
+<link rel="canonical" href="https://ruffquote.com/lawn-mowing/">
+<meta property="og:title" content="Lawn Mowing Cost Calculator: What Should You Pay? | RuffQuote">
+<meta property="og:description" content="Free lawn mowing cost calculator. See a fair price range for your job, what most people pay, and what affects the price. Lawn Mowing pros can build a price list too.">
+<meta property="og:url" content="https://ruffquote.com/lawn-mowing/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RuffQuote">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/style.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is bagging clippings included?","acceptedAnswer":{"@type":"Answer","text":"Usually not. Most pros mulch clippings and charge extra to bag and haul them."}},{"@type":"Question","name":"Do lawn services charge in winter?","acceptedAnswer":{"@type":"Answer","text":"Some offer year-round plans with leaf cleanup and winter visits. Others pause service."}}]}</script>
+</head>
+<body data-service="lawn-mowing">
+<div class="page">
+<header class="top">
+  <a class="brand" href="/" aria-label="RuffQuote home"><svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><path fill="var(--accent)" d="M7 6c2 0 3 2 3.5 4h11C22 8 23 6 25 6c2.5 0 3 4 2 7-.6 1.8-1.6 2.6-2.4 3 .3.9.4 1.9.4 3 0 5.5-4.5 9-9 9s-9-3.5-9-9c0-1.1.1-2.1.4-3-.8-.4-1.8-1.2-2.4-3-1-3-.5-7 2-7z"/><circle cx="12.5" cy="18" r="1.6" fill="var(--bg)"/><circle cx="19.5" cy="18" r="1.6" fill="var(--bg)"/><ellipse cx="16" cy="22.5" rx="2.2" ry="1.5" fill="var(--bg)"/></svg><span>Ruff<b>Quote</b></span></a>
+  <nav aria-label="Main"><a href="/#services">Services</a><a href="/about/">About</a></nav>
+</header>
+
+<div class="tabs" role="tablist">
+  <button type="button" class="tab" role="tab" id="t-cust" aria-controls="p-cust" aria-selected="true">I need lawn mowing</button>
+  <button type="button" class="tab" role="tab" id="t-pro" aria-controls="p-pro" aria-selected="false">I'm a lawn care pro</button>
+</div>
+
+<section id="p-cust" class="panel" role="tabpanel" aria-labelledby="t-cust">
+  <div>
+    <div class="eyebrow">Lawn Mowing cost calculator</div>
+    <h1>How much should lawn mowing cost?</h1>
+    <p class="lede">Answer a few questions to see a fair price range and what most people pay. Use it to check a quote before you book.</p>
+  </div>
+  <div class="grid">
+    <form id="cust-form" autocomplete="off"></form>
+    <div class="card" aria-live="polite">
+      <div>
+        <div class="eyebrow">Fair price</div>
+        <div class="big" id="range"></div>
+        <div class="muted" id="typical"></div>
+      </div>
+      <div class="note" id="includes"></div>
+      <div class="cta">
+        <p><b>Local lawn care pros near you</b></p>
+        <p class="muted">We're adding trusted local lawn care pros soon. Are you one? Get listed so customers here can find you.</p>
+        <a class="linkbtn" href="#pros" data-go="pros">See the lawn care pro price tool</a>
+      </div>
+    </div>
+  </div>
+  <div class="prose">
+    <h2>What affects the price of lawn mowing</h2>
+    <ul><li>Yard size. Most pros price per visit based on the lot.</li><li>Frequency. Regular weekly or biweekly service costs less per visit.</li><li>Obstacles. Trees, beds, slopes and fences mean more trimming.</li><li>Overgrowth. Tall grass may need two passes or a bagging fee.</li></ul>
+    <p>The low end of the range is a newer lawn care pro at about $35 an hour. The high end is an experienced pro at about $65 an hour who travels to you. Many lawn care pros have a minimum charge of around $35. Prices are higher in big cities.</p>
+  </div>
+  <div class="prose faq">
+    <h2>Common questions</h2>
+    <h3>Is bagging clippings included?</h3><p>Usually not. Most pros mulch clippings and charge extra to bag and haul them.</p><h3>Do lawn services charge in winter?</h3><p>Some offer year-round plans with leaf cleanup and winter visits. Others pause service.</p>
+  </div>
+</section>
+
+<section id="p-pro" class="panel" role="tabpanel" aria-labelledby="t-pro" hidden>
+  <div>
+    <div class="eyebrow">Free pricing tool for lawn care pros</div>
+    <h2 style="font-size:clamp(32px,6vw,48px);line-height:1.05">How much should I charge for lawn mowing?</h2>
+    <p class="lede">Enter what your time is worth and your costs. You get a price list you can paste into a flyer, Facebook post or booking page.</p>
+  </div>
+  <div class="grid">
+    <form id="pro-form" autocomplete="off">
+      <div class="field"><label class="label" for="rate">What you want to earn per hour</label>
+        <div class="inrow"><span>$</span><input id="rate" type="number" inputmode="decimal" min="0" step="1"></div>
+        <small>Your pay for time on the job. Supplies are added separately.</small></div>
+      <div class="field"><label class="label" for="miles">Round-trip miles to a typical job</label>
+        <div class="inrow"><input id="miles" type="number" inputmode="decimal" min="0" step="1" value="16"><span>miles</span></div></div>
+      <div class="field"><label class="label" for="permile">Driving cost per mile</label>
+        <div class="inrow"><span>$</span><input id="permile" type="number" inputmode="decimal" min="0" step="0.05" value="0.70"></div>
+        <small>Gas, wear and insurance. The IRS business mileage rate is a common benchmark.</small></div>
+      <div class="field"><label class="label" for="over">Overhead and profit</label>
+        <div class="inrow"><input id="over" type="number" inputmode="decimal" min="0" step="1" value="15"><span>%</span></div>
+        <small>Covers equipment, card fees, slow weeks and no-shows.</small></div>
+    </form>
+    <div class="card">
+      <h2>Your price list</h2>
+      <div class="tablebox"><table>
+        <thead><tr><th>Job</th><th class="num">Time</th><th class="num">Price</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <div class="actions"><button type="button" class="btn" id="copy">Copy price list</button><span id="copied" class="muted" role="status"></span></div>
+      <textarea id="out" readonly aria-label="Price list text"></textarea>
+      <div class="cta">
+        <p><b>Get customers from RuffQuote.</b> Homeowners use this site to check lawn mowing prices. Get listed and show up next to their results.</p>
+        <a class="linkbtn" href="mailto:hello@ruffquote.com?subject=List%20my%20lawn%20mowing%20business">Email us to get listed: hello@ruffquote.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="prose">
+    <h2>How the prices are worked out</h2>
+    <p>Each price is your hourly rate times the typical time for that job, plus supplies and driving, plus your overhead and profit, rounded up to the nearest $5. Small jobs use a $35 minimum. If you work faster or slower than the times shown, adjust your hourly rate.</p>
+    <p>Before you post prices, check two or three local lawn care pros on Google or Facebook. If you're well below them, you can probably charge more.</p>
+    <p><a href="#" data-go="cust">See what customers expect to pay</a></p>
+  </div>
+</section>
+<footer>
+  <span>© 2026 RuffQuote. Prices are estimates, not quotes.</span>
+  <span><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="mailto:hello@ruffquote.com">hello@ruffquote.com</a></span>
+</footer>
+</div>
+<script src="/assets/services.js"></script><script src="/assets/app.js"></script>
+</body>
+</html>
