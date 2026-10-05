@@ -1,7 +1,7 @@
-// Free Unsplash photos (Unsplash License), loaded from images.unsplash.com. Two per service: banner/card, then side photo.
+// Free photos from Unsplash and Pexels (both free for commercial use), loaded from their image CDNs. Two per service: banner/card, then side photo.
 const U = id => "https://images.unsplash.com/photo-" + id;
 module.exports = {
-  "home": [{ url: U("1677956787377-a0f32c0974af"), alt: "Worker in a yellow jacket using a pressure washer" }],
+  "home": [{ url: "https://images.pexels.com/photos/6720550/pexels-photo-6720550.jpeg", alt: "Mechanic and customer shaking hands in a garage" }],
   "car-detailing": [{ url: U("1633014041037-f5446fb4ce99"), alt: "Grey car covered in soap suds during a professional wash" }, { url: U("1708805282706-f44730b7e527"), alt: "Man waxing a car in a garage" }],
   "pressure-washing": [{ url: U("1707897283727-31befe824066"), alt: "Man pressure washing a driveway" }, { url: U("1677956787377-a0f32c0974af"), alt: "Worker in a yellow jacket using a pressure washer" }],
   "window-cleaning": [{ url: U("1763026227930-ec2c91d4e7f2"), alt: "Man cleaning a window with a squeegee" }, { url: U("1524803504179-6d7ae4d283f7"), alt: "Three men cleaning windows" }],

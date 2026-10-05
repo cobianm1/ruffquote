@@ -33,7 +33,7 @@ function typicalRange(s) {
 // Unsplash image with responsive sizes
 function photo(p, { cls = "", sizes = "100vw", eager = false } = {}) {
   if (!p) return "";
-  const u = w => `${p.url}?auto=format&fit=crop&w=${w}&q=70`;
+  const u = w => p.url.includes("pexels.com") ? `${p.url}?auto=compress&cs=tinysrgb&w=${w}` : `${p.url}?auto=format&fit=crop&w=${w}&q=70`;
   return `<img class="${cls}" src="${u(800)}" srcset="${[400, 800, 1200, 1600].map(w => `${u(w)} ${w}w`).join(", ")}" sizes="${sizes}" alt="${esc(p.alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`;
 }
 const pic = (slug, i) => (PHOTOS[slug] || [])[i] || (PHOTOS[slug] || [])[0];
@@ -44,7 +44,7 @@ function svcCard(s) {
 }
 
 function layout({ title, description, urlPath, body, service, jsonld, image }) {
-  const og = image ? `${image.url}?auto=format&fit=crop&w=1200&h=630&q=70` : "";
+  const og = !image ? "" : image.url.includes("pexels.com") ? `${image.url}?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop` : `${image.url}?auto=format&fit=crop&w=1200&h=630&q=70`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -61,6 +61,7 @@ function layout({ title, description, urlPath, body, service, jsonld, image }) {
 ${og ? `<meta property="og:image" content="${og}">\n<meta name="twitter:card" content="summary_large_image">` : ""}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://images.unsplash.com">
+<link rel="preconnect" href="https://images.pexels.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Public+Sans:wght@400;500;600&display=swap">
@@ -83,7 +84,7 @@ ${body}
     ${GROUPS.map(([g, slugs]) => `<div><h4>${g}</h4><ul>${slugs.map(x => `<li><a href="/${x}/">${bySlug[x].name}</a></li>`).join("")}</ul></div>`).join("\n    ")}
   </div>
   <div class="wrap fine">
-    <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes. Photos from Unsplash.</span>
+    <span>© ${new Date().getFullYear()} RuffQuote. Prices are estimates, not quotes. Photos from Unsplash and Pexels.</span>
     <span><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="mailto:${EMAIL}">${EMAIL}</a></span>
   </div>
 </footer>
