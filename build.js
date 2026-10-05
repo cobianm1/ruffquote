@@ -162,7 +162,7 @@ function homePage() {
 </section>`;
   return layout({
     title: "RuffQuote: Fair Prices for Home and Car Services",
-    description: "Free calculators that show what home and car services should cost: car detailing, pressure washing, window cleaning, gutter cleaning, house cleaning and lawn mowing.",
+    description: "Free calculators that show what home and car services should cost, from gutter cleaning and pressure washing to car detailing and Christmas light installation.",
     urlPath: "/", body
   });
 }

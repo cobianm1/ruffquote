@@ -227,6 +227,80 @@ const SERVICES = [
       ["Is bagging clippings included?", "Usually not. Most pros mulch clippings and charge extra to bag and haul them."],
       ["Do lawn services charge in winter?", "Some offer year-round plans with leaf cleanup and winter visits. Others pause service."]
     ]
+  },
+  {
+    slug: "trash-can-cleaning",
+    name: "Trash Can Cleaning",
+    noun: "trash can cleaning",
+    pro: "bin cleaner",
+    lowRate: 30, highRate: 60, minCharge: 25,
+    fields: [
+      { id: "bins", label: "Number of bins", type: "number", unit: "bins", default: 2, min: 1, max: 8, step: 1,
+        help: "Trash, recycling and yard waste bins each count as one." },
+      { id: "plan", label: "How often", type: "chips", default: 1,
+        options: ["One-time clean", "Monthly", "Every 3 months"] }
+    ],
+    estimate(v) {
+      const setup = [0.5, 0.1, 0.2][v.plan];
+      const k = [1.3, 1, 1.15][v.plan];
+      return { hours: setup + v.bins * 0.12 * k, supplies: 2 + v.bins * 1.5 * k };
+    },
+    includes: v => (v.plan === 0 ? "Deep clean of heavy buildup, " : "") + "Hot-water pressure wash inside and out, deodorized, and returned to the curb",
+    presets: [
+      ["One-time clean", "1 bin", { bins: 1, plan: 0 }],
+      ["One-time clean", "2 bins", { bins: 2, plan: 0 }],
+      ["One-time clean", "3 bins", { bins: 3, plan: 0 }],
+      ["Monthly plan", "2 bins, per visit", { bins: 2, plan: 1 }],
+      ["Every 3 months", "2 bins, per visit", { bins: 2, plan: 2 }]
+    ],
+    factors: [
+      "Number of bins. Most companies charge for the first bin and less for each extra one.",
+      "Plan. Monthly plans cost less per visit because the cleaner is already on your street.",
+      "First clean. Bins that have never been cleaned take longer and may cost more the first time.",
+      "Route density. Neighborhoods with many customers on cleaning day get the best prices."
+    ],
+    faq: [
+      ["When do bins get cleaned?", "Usually on your trash day, right after the truck empties them. You leave them at the curb."],
+      ["Is it worth it?", "It stops smells, maggots and pests, especially in summer. Many people find a quarterly plan is enough."]
+    ]
+  },
+  {
+    slug: "christmas-light-installation",
+    name: "Christmas Light Installation",
+    noun: "Christmas light installation",
+    pro: "light installer",
+    lowRate: 35, highRate: 70, minCharge: 250,
+    fields: [
+      { id: "feet", label: "Length of roofline to light", type: "number", unit: "feet", default: 150, min: 20, max: 800, step: 10,
+        help: "Measure the gutters and peaks you want lit. A typical front roofline is 80 to 200 feet." },
+      { id: "stories", label: "Home height", type: "chips", default: 0,
+        options: ["1 story", "2 stories", "3 stories"] },
+      { id: "takedown", label: "Takedown", type: "chips", default: 1,
+        options: ["Install only", "Install and takedown"] }
+    ],
+    estimate(v) {
+      const perHour = [60, 40, 28][v.stories];
+      const install = 0.5 + v.feet / perHour;
+      return { hours: install * (v.takedown ? 1.4 : 1), supplies: v.feet * 2 };
+    },
+    includes: v => "Commercial-grade LED lights and clips supplied, roofline installed and tested" + (v.takedown ? ", taken down and stored after the season" : ""),
+    presets: [
+      ["100 feet", "1 story, with takedown", { feet: 100, stories: 0, takedown: 1 }],
+      ["150 feet", "1 story, with takedown", { feet: 150, stories: 0, takedown: 1 }],
+      ["150 feet", "2 stories, with takedown", { feet: 150, stories: 1, takedown: 1 }],
+      ["250 feet", "2 stories, with takedown", { feet: 250, stories: 1, takedown: 1 }],
+      ["200 feet", "3 stories, with takedown", { feet: 200, stories: 2, takedown: 1 }]
+    ],
+    factors: [
+      "Length. Most installers price by the foot of roofline, with lights included.",
+      "Height and roof pitch. Second stories and steep roofs need more time and safety gear.",
+      "Lights. Pros usually supply commercial-grade LEDs. Using your own lights may lower the price.",
+      "Extras. Trees, bushes, wreaths and pathway lights are priced on top of the roofline."
+    ],
+    faq: [
+      ["When should I book?", "Book in September or October. Installers fill up fast, and November slots go first."],
+      ["Do I keep the lights?", "Usually not. Most installers lease the lights, take them down after the holidays, and store them for next year."]
+    ]
   }
 ];
 
