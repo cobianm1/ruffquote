@@ -1,0 +1,32 @@
+// "Pros near you": lists real providers who signed up, with the job prices they set.
+(function () {
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  document.querySelectorAll(".pros[data-service]").forEach(box => {
+    const svc = box.dataset.service, pros = box.dataset.pros, pro = box.dataset.pro;
+    const list = box.querySelector(".pros-list");
+    const where = box.querySelector(".pros-where");
+    const form = box.querySelector("form");
+    function load(zip) {
+      list.setAttribute("aria-busy", "true");
+      fetch(`/api/pros?service=${encodeURIComponent(svc)}${zip ? `&zip=${encodeURIComponent(zip)}` : ""}`)
+        .then(r => r.ok ? r.json() : Promise.reject(r.status))
+        .then(render)
+        .catch(() => { list.innerHTML = empty(); })
+        .finally(() => list.removeAttribute("aria-busy"));
+    }
+    function empty() {
+      return `<p class="muted">No ${esc(pros)} have listed near you yet. Are you one? <a href="/get-listed/?service=${esc(svc)}">Get listed free</a> and show up here with your prices.</p>`;
+    }
+    function render(data) {
+      if (data.near && (data.near.city || data.near.zip)) where.textContent = `near ${[data.near.city, data.near.state].filter(Boolean).join(", ") || data.near.zip}`;
+      if (!data.pros || !data.pros.length) { list.innerHTML = empty(); return; }
+      list.innerHTML = data.pros.map(p => `<div class="pro-card${p.featured ? " featured" : ""}">
+        <div class="pro-head"><b>${esc(p.business)}</b><small>${esc([p.city, p.state].filter(Boolean).join(", "))}${p.miles != null ? ` · ${p.miles} mi` : ""}</small></div>
+        ${p.jobs && p.jobs.length ? `<ul class="pro-jobs">${p.jobs.slice(0, 6).map(j => `<li><span>${esc(j.name)}</span><b>$${Number(j.price).toLocaleString("en-US")}</b></li>`).join("")}</ul>` : ""}
+        <div class="pro-actions">${p.phone ? `<a class="btn btn-sm" href="tel:${esc(p.phone.replace(/[^\d+]/g, ""))}">Call ${esc(p.phone)}</a>` : ""}${p.email ? `<a href="mailto:${esc(p.email)}">Email</a>` : ""}${p.website ? `<a href="${esc(p.website)}" target="_blank" rel="nofollow noopener">Website</a>` : ""}</div>
+      </div>`).join("") + `<p class="pros-note">Prices are set by each business. RuffQuote doesn't check or guarantee them. <a href="/get-listed/?service=${esc(svc)}">Are you a ${esc(pro)}? Get listed</a></p>`;
+    }
+    form.addEventListener("submit", e => { e.preventDefault(); const z = form.zip.value.trim(); if (/^\d{5}$/.test(z)) load(z); });
+    load("");
+  });
+})();

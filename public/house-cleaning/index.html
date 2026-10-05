@@ -58,10 +58,10 @@
         <div class="rangelabels" aria-hidden="true"><span>Newer pro</span><span>Typical</span><span>Experienced pro</span></div>
       </div>
       <div class="note" id="includes"></div>
-      <div class="cta">
-        <p><b>Local house cleaners near you</b></p>
-        <p class="muted">We're adding trusted local house cleaners soon. Are you one? Get listed so customers here can find you.</p>
-        <a class="linkbtn" href="/get-listed/?service=house-cleaning">Get listed as a house cleaner</a>
+      <div class="pros" data-service="house-cleaning" data-pro="house cleaner" data-pros="house cleaners">
+        <div class="pros-top"><b>House cleaners <span class="pros-where">near you</span></b>
+          <form class="pros-zip"><label class="sr" for="zip-house-cleaning">Your ZIP code</label><input id="zip-house-cleaning" name="zip" inputmode="numeric" maxlength="5" placeholder="ZIP"><button type="submit">Go</button></form></div>
+        <div class="pros-list" aria-live="polite"><p class="muted">Looking for house cleaners near you…</p></div>
       </div>
       <div class="quickshop"><b>Doing it yourself?</b> Top picks on Amazon: <a href="https://www.amazon.com/s?k=cordless+stick+vacuum&tag=ruffquote-20" target="_blank" rel="sponsored nofollow noopener">Cordless vacuum</a><a href="https://www.amazon.com/s?k=spin+mop+bucket&tag=ruffquote-20" target="_blank" rel="sponsored nofollow noopener">Spin mop and bucket</a><a href="https://www.amazon.com/s?k=microfiber+cleaning+cloths&tag=ruffquote-20" target="_blank" rel="sponsored nofollow noopener">Microfiber cloths</a><a class="more" href="#gear">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>
     </div>
@@ -150,5 +150,6 @@
   </div>
 </footer>
 <script src="/assets/services.js"></script><script src="/assets/app.js"></script>
+<script src="/assets/pros.js" defer></script>
 </body>
 </html>

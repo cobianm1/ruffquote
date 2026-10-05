@@ -212,3 +212,38 @@ details p{margin:8px 0 0}
 .fine{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:13px;border-top:1px solid #23404a;padding-block:16px 28px}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Pros near you */
+.pros{border-top:1px solid var(--line);margin-top:18px;padding-top:16px;display:grid;gap:12px}
+.pros-section{display:grid;gap:12px}
+.pros-top{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.pros-top b{font:700 20px var(--display)}
+.pros-zip{display:flex;gap:6px}
+.pros-zip input{width:84px;font:500 16px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.pros-zip button{font:600 14px var(--body);border:0;border-radius:8px;padding:7px 14px;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.pros-list{display:grid;gap:10px}
+.pros-list .muted{margin:0}
+.pro-card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface);display:grid;gap:8px}
+.pro-card.featured{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.pro-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 10px;align-items:baseline}
+.pro-head b{font-size:17px}
+.pro-head small{color:var(--muted)}
+.pro-jobs{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.pro-jobs li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding-bottom:4px;font-size:15px}
+.pro-jobs li:last-child{border-bottom:0}
+.pro-jobs b{color:var(--accent);white-space:nowrap}
+.pro-actions{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:15px;font-weight:600}
+.pros-note{margin:0;font-size:13px;color:var(--muted)}
+/* Signup form: jobs and prices */
+.jobs{border:0;margin:0;padding:0;display:grid;gap:10px;min-width:0}
+.jobs legend{padding:0;margin-bottom:2px}
+.jobchips{display:flex;flex-wrap:wrap;gap:8px}
+.jobchips:empty{display:none}
+.jobchip{font:500 14px var(--body);border:1px dashed var(--accent);background:var(--soft);color:var(--fg);border-radius:999px;padding:7px 12px;cursor:pointer;text-align:left}
+#jobrows{display:grid;gap:8px}
+.jobrow{display:grid;grid-template-columns:minmax(0,1fr) 112px 36px;gap:8px;align-items:center}
+.jobrow .dollar{position:relative}
+.jobrow .dollar::before{content:"$";position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600;pointer-events:none}
+.listform .jobrow .dollar input{padding-left:24px}
+.jobrow .rm{width:36px;height:36px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;font-size:20px;line-height:1;cursor:pointer}
+.addjob{justify-self:start;font:600 15px var(--body);background:none;border:0;color:var(--accent);cursor:pointer;padding:4px 0}
+.addjob[hidden]{display:none}

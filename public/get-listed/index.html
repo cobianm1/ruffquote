@@ -34,10 +34,11 @@
   <div class="listed-intro">
     <div class="eyebrow">For local pros</div>
     <h1>Get your business in front of customers</h1>
-    <p class="lede">Homeowners use RuffQuote to check prices before they hire. Add your business and we'll list you on the pages for your service and area.</p>
+    <p class="lede">Homeowners use RuffQuote to check prices before they hire. Add your business and the jobs you do with your price for each. Customers near you see your prices right on the page for that job.</p>
     <ul class="checks">
       <li>Free basic listing. No account or credit card.</li>
-      <li>Takes about 30 seconds.</li>
+      <li>Takes about a minute. Tap a common job, type your price, done.</li>
+      <li>Your listing goes live on your service page for customers in your area.</li>
       <li>Featured spots at the top of results are coming soon. Tick the box if you want first dibs.</li>
     </ul>
   </div>
@@ -45,7 +46,17 @@
     <p class="formerr" id="formerr" role="alert" hidden></p>
     <div class="field"><label class="label" for="business">Business name *</label><input id="business" name="business" required maxlength="120" autocomplete="organization"></div>
     <div class="field"><label class="label" for="service">Service *</label><select id="service" name="service" required><option value="">Choose one</option><optgroup label="Home services"><option value="pressure-washing">Pressure Washing</option><option value="window-cleaning">Window Cleaning</option><option value="gutter-cleaning">Gutter Cleaning</option><option value="lawn-mowing">Lawn Mowing</option><option value="tree-trimming">Tree Trimming</option><option value="trash-can-cleaning">Trash Can Cleaning</option><option value="christmas-light-installation">Christmas Light Installation</option><option value="house-cleaning">House Cleaning</option><option value="carpet-cleaning">Carpet Cleaning</option><option value="interior-painting">Interior Painting</option><option value="junk-removal">Junk Removal</option><option value="drain-cleaning">Drain Cleaning</option><option value="handyman">Handyman</option></optgroup><optgroup label="Car services"><option value="car-detailing">Car Detailing</option><option value="mobile-mechanic">Mobile Mechanic</option></optgroup><option value="other">Something else</option></select></div>
-    <div class="field"><label class="label" for="area">City or ZIP you serve *</label><input id="area" name="area" required maxlength="80" autocomplete="postal-code"></div>
+    <div class="two">
+      <div class="field"><label class="label" for="zip">Your ZIP code *</label><input id="zip" name="zip" required maxlength="5" pattern="[0-9]{5}" inputmode="numeric" autocomplete="postal-code" placeholder="e.g. 78704"></div>
+      <div class="field"><label class="label" for="radius">How far you travel</label><select id="radius" name="radius"><option value="10">10 miles</option><option value="25" selected>25 miles</option><option value="50">50 miles</option></select></div>
+    </div>
+    <fieldset class="jobs">
+      <legend class="label">Your jobs and prices</legend>
+      <small class="muted">Tap a common job or type your own, like "Drain cleanout $90" or "Basic car wash $40".</small>
+      <div class="jobchips" id="jobchips"></div>
+      <div id="jobrows"></div>
+      <button type="button" class="addjob" id="addjob">+ Add another job</button>
+    </fieldset>
     <div class="two">
       <div class="field"><label class="label" for="phone">Phone</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div>
       <div class="field"><label class="label" for="email">Email</label><input id="email" name="email" type="email" maxlength="120" autocomplete="email"></div>
@@ -64,10 +75,20 @@
   </form>
 </section>
 <script>
+var JOBS={"car-detailing":[["Exterior wash, Sedan",65],["Exterior wash, SUV",75],["Exterior wash, Truck or van",90],["Interior detail, Sedan",90],["Interior detail, SUV",115],["Interior detail, Truck or van",125],["Full detail, Sedan",170],["Full detail, SUV",205]],"pressure-washing":[["Driveway, 600 sq ft",135],["Driveway, 1,000 sq ft",170],["House siding, 1,500 sq ft",290],["House siding, 2,500 sq ft",440],["Deck or fence, 300 sq ft",145],["Patio, 400 sq ft",125]],"window-cleaning":[["15 windows, 1 story, outside",125],["15 windows, 1 story, inside and out",160],["25 windows, 2 stories, outside",180],["25 windows, 2 stories, inside and out",295],["40 windows, 2 stories, inside and out",450]],"gutter-cleaning":[["120 feet, 1 story",145],["180 feet, 1 story",160],["150 feet, 2 stories",180],["220 feet, 2 stories",225],["200 feet, 3 stories",265]],"house-cleaning":[["Standard clean, 2 bed, 1 bath",150],["Standard clean, 3 bed, 2 bath",205],["Standard clean, 4 bed, 3 bath",260],["Deep clean, 3 bed, 2 bath",320],["Move-out clean, 3 bed, 2 bath",395]],"lawn-mowing":[["Small yard, 1/8 acre, recurring",50],["Medium yard, 1/4 acre, recurring",60],["Large yard, 1/2 acre, recurring",95],["Very large yard, 1 acre, recurring",140],["Medium yard, 1/4 acre, one-time",85]],"trash-can-cleaning":[["One-time clean, 1 bin",55],["One-time clean, 2 bins",65],["One-time clean, 3 bins",75],["Monthly plan, 2 bins, per visit",40],["Every 3 months, 2 bins, per visit",45]],"christmas-light-installation":[["100 feet, 1 story, with takedown",440],["150 feet, 1 story, with takedown",630],["150 feet, 2 stories, with takedown",740],["250 feet, 2 stories, with takedown",1195],["200 feet, 3 stories, with takedown",1155]],"mobile-mechanic":[["Oil change, Car",125],["Oil change, SUV, truck or van",145],["Tire rotation",65],["Brake pads, one axle, Car",225],["Brake pads, one axle, SUV, truck or van",265],["Battery replacement, Car",255]],"drain-cleaning":[["Sink or tub drain",160],["Toilet clog",140],["Main sewer line clean-out",300],["Main sewer line clean-out, No clean-out",415],["Sink or tub drain, Emergency or weekend",290]],"handyman":[["Install a dishwasher",205],["Replace a light fixture",120],["Change high-ceiling bulbs, Up to 6 bulbs",110],["Mount a TV",120],["Replace a ceiling fan",155],["Replace a faucet",140],["Hang shelves or pictures, Up to 5 items",160],["Assemble furniture, 1 large piece",130]],"junk-removal":[["A few items",145],["Single appliance",195],["1/4 truck",220],["1/2 truck",325],["3/4 truck",450],["Full truck",565],["Full truck, Basement or upstairs",680]],"carpet-cleaning":[["1 room",130],["3 rooms",185],["3 rooms and stairs",225],["5 rooms",260],["5 rooms and stairs, Some stains",370],["3 rooms, Pet urine or odor",275]],"interior-painting":[["1 small room, Walls only",470],["1 medium room, Walls only",565],["1 medium room, Walls, ceiling and trim",910],["1 large room, Walls, color change",885],["3 medium rooms, Walls only",1585],["3 medium rooms, Walls, ceiling and trim",2610]],"tree-trimming":[["1 small tree",220],["1 medium tree",445],["1 medium tree, Over the house",530],["1 large tree",810],["1 very large tree",1370],["3 medium trees",1175]]};
 (function(){var q=new URLSearchParams(location.search),s=q.get("service"),e=q.get("error");
 document.getElementById("t").value=Date.now();
 if(s){var o=document.querySelector('#service option[value="'+s.replace(/[^a-z-]/g,"")+'"]');if(o)o.selected=true;}
-if(e){var p=document.getElementById("formerr");p.textContent=e;p.hidden=false;}})();
+if(e){var p=document.getElementById("formerr");p.textContent=e;p.hidden=false;}
+var rows=document.getElementById("jobrows"),chips=document.getElementById("jobchips"),sel=document.getElementById("service"),add=document.getElementById("addjob"),n=0;
+function row(name,ph){if(rows.children.length>=12)return null;n++;var d=document.createElement("div");d.className="jobrow";
+d.innerHTML='<label class="sr" for="jn'+n+'">Job</label><input id="jn'+n+'" name="job_name" maxlength="80" placeholder="Job, e.g. Drain cleanout"><span class="dollar"><label class="sr" for="jp'+n+'">Price in dollars</label><input id="jp'+n+'" name="job_price" inputmode="decimal" maxlength="7" placeholder="Price"></span><button type="button" class="rm" aria-label="Remove this job">&times;</button>';
+d.querySelector("[name=job_name]").value=name||"";var pi=d.querySelector("[name=job_price]");if(ph)pi.placeholder=ph;pi.oninput=function(){pi.value=pi.value.replace(/[^0-9.]/g,"");};
+d.querySelector(".rm").onclick=function(){d.remove();if(!rows.children.length)row();};rows.appendChild(d);add.hidden=rows.children.length>=12;return d;}
+function empty(){var r=rows.querySelectorAll(".jobrow");for(var i=0;i<r.length;i++)if(!r[i].querySelector("[name=job_name]").value)return r[i];return null;}
+function showChips(){var list=JOBS[sel.value]||[];chips.innerHTML="";list.forEach(function(j){var b=document.createElement("button");b.type="button";b.className="jobchip";b.textContent="+ "+j[0];
+b.onclick=function(){var r=empty()||row();if(!r)return;r.querySelector("[name=job_name]").value=j[0];var pr=r.querySelector("[name=job_price]");pr.placeholder="Typical $"+j[1];pr.focus();b.remove();};chips.appendChild(b);});}
+add.onclick=function(){var r=row();if(r)r.querySelector("input").focus();};sel.addEventListener("change",showChips);row();row();showChips();})();
 </script>
 </main>
 <footer class="site-foot">
@@ -81,6 +102,7 @@ if(e){var p=document.getElementById("formerr");p.textContent=e;p.hidden=false;}}
     <span><a href="/about/">About</a> · <a href="/privacy/">Privacy</a> · <a href="mailto:hello@ruffquote.com">hello@ruffquote.com</a></span>
   </div>
 </footer>
+
 
 </body>
 </html>

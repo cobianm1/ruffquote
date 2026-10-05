@@ -58,10 +58,10 @@
         <div class="rangelabels" aria-hidden="true"><span>Newer pro</span><span>Typical</span><span>Experienced pro</span></div>
       </div>
       <div class="note" id="includes"></div>
-      <div class="cta">
-        <p><b>Local handymen near you</b></p>
-        <p class="muted">We're adding trusted local handymen soon. Are you one? Get listed so customers here can find you.</p>
-        <a class="linkbtn" href="/get-listed/?service=handyman">Get listed as a handyman</a>
+      <div class="pros" data-service="handyman" data-pro="handyman" data-pros="handymen">
+        <div class="pros-top"><b>Handymen <span class="pros-where">near you</span></b>
+          <form class="pros-zip"><label class="sr" for="zip-handyman">Your ZIP code</label><input id="zip-handyman" name="zip" inputmode="numeric" maxlength="5" placeholder="ZIP"><button type="submit">Go</button></form></div>
+        <div class="pros-list" aria-live="polite"><p class="muted">Looking for handymen near you…</p></div>
       </div>
       <div class="quickshop"><b>Doing it yourself?</b> Top picks on Amazon: <a href="https://www.amazon.com/s?k=cordless+drill+driver+set&tag=ruffquote-20" target="_blank" rel="sponsored nofollow noopener">Cordless drill set</a><a href="https://www.amazon.com/s?k=stud+finder&tag=ruffquote-20" target="_blank" rel="sponsored nofollow noopener">Stud finder</a><a href="https://www.amazon.com/s?k=tv+wall+mount&tag=ruffquote-20" target="_blank" rel="sponsored nofollow noopener">TV wall mount</a><a class="more" href="#gear">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>
     </div>
@@ -150,5 +150,6 @@
   </div>
 </footer>
 <script src="/assets/services.js"></script><script src="/assets/app.js"></script>
+<script src="/assets/pros.js" defer></script>
 </body>
 </html>

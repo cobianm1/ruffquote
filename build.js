@@ -130,6 +130,7 @@ ${body}
   </div>
 </footer>
 ${service ? `<script src="/assets/services.js"></script><script src="/assets/app.js"></script>` : ""}
+${body.includes('class="pros"') ? `<script src="/assets/pros.js" defer></script>` : ""}
 </body>
 </html>
 `;
@@ -169,10 +170,10 @@ function servicePage(s) {
         <div class="rangelabels" aria-hidden="true"><span>Newer pro</span><span>Typical</span><span>Experienced pro</span></div>
       </div>
       <div class="note" id="includes"></div>
-      <div class="cta">
-        <p><b>Local ${proPlural} near you</b></p>
-        <p class="muted">We're adding trusted local ${proPlural} soon. Are you one? Get listed so customers here can find you.</p>
-        <a class="linkbtn" href="/get-listed/?service=${s.slug}">Get listed as a ${s.pro}</a>
+      <div class="pros" data-service="${s.slug}" data-pro="${s.pro}" data-pros="${proPlural}">
+        <div class="pros-top"><b>${proPlural[0].toUpperCase() + proPlural.slice(1)} <span class="pros-where">near you</span></b>
+          <form class="pros-zip"><label class="sr" for="zip-${s.slug}">Your ZIP code</label><input id="zip-${s.slug}" name="zip" inputmode="numeric" maxlength="5" placeholder="ZIP"><button type="submit">Go</button></form></div>
+        <div class="pros-list" aria-live="polite"><p class="muted">Looking for ${proPlural} near you…</p></div>
       </div>
       ${gearQuick(s.slug)}
     </div>
@@ -340,6 +341,11 @@ ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 1
   <p class="muted">Labor and basic supplies. Big parts or appliances you buy yourself are extra. Prices run higher in big cities.</p>
 </section>
 ${gearBlock(s.slug, "Gear that helps")}
+<section class="card pros-section">${(() => { const proPlural = plural(s.pro); return `<div class="pros" data-service="${s.slug}" data-pro="${s.pro}" data-pros="${proPlural}">
+        <div class="pros-top"><b>${proPlural[0].toUpperCase() + proPlural.slice(1)} <span class="pros-where">near you</span></b>
+          <form class="pros-zip"><label class="sr" for="zip-${s.slug}">Your ZIP code</label><input id="zip-${s.slug}" name="zip" inputmode="numeric" maxlength="5" placeholder="ZIP"><button type="submit">Go</button></form></div>
+        <div class="pros-list" aria-live="polite"><p class="muted">Looking for ${proPlural} near you…</p></div>
+      </div>`; })()}</section>
 <div class="split">
   <section class="prose">
     <h2>What's usually included</h2>
@@ -402,16 +408,28 @@ ${CATS.map(c => `<section class="group"><h2 class="group-h">${c.name}</h2>${c.sl
   return layout({ title: "Cost Guides for Home and Car Services | RuffQuote", description: "How much do common home and car jobs cost? Price tables, what's included and ways to save for junk removal, painting, oil changes, TV mounting and more.", urlPath: "/cost-guides/", body });
 }
 
+// Common jobs per service for the signup form chips: [name, typical mid price]
+function jobSuggestions() {
+  const out = {};
+  for (const s of SERVICES) out[s.slug] = (s.presets || []).slice(0, 8).map(([a, b, v]) => {
+    const [lo, hi] = typicalRange(s, v);
+    const plain = /^(Regular hours|Ground floor|Open yard|Normal soil|Any vehicle|Easy access|1 (unit|fixture|fan|faucet|TV))$/.test(b);
+    return [b && !plain ? `${a}, ${b}` : a, up5((lo + hi) / 2)];
+  });
+  return out;
+}
+
 function getListedPage() {
   const body = `
 <section class="listed">
   <div class="listed-intro">
     <div class="eyebrow">For local pros</div>
     <h1>Get your business in front of customers</h1>
-    <p class="lede">Homeowners use RuffQuote to check prices before they hire. Add your business and we'll list you on the pages for your service and area.</p>
+    <p class="lede">Homeowners use RuffQuote to check prices before they hire. Add your business and the jobs you do with your price for each. Customers near you see your prices right on the page for that job.</p>
     <ul class="checks">
       <li>Free basic listing. No account or credit card.</li>
-      <li>Takes about 30 seconds.</li>
+      <li>Takes about a minute. Tap a common job, type your price, done.</li>
+      <li>Your listing goes live on your service page for customers in your area.</li>
       <li>Featured spots at the top of results are coming soon. Tick the box if you want first dibs.</li>
     </ul>
   </div>
@@ -419,7 +437,17 @@ function getListedPage() {
     <p class="formerr" id="formerr" role="alert" hidden></p>
     <div class="field"><label class="label" for="business">Business name *</label><input id="business" name="business" required maxlength="120" autocomplete="organization"></div>
     <div class="field"><label class="label" for="service">Service *</label><select id="service" name="service" required><option value="">Choose one</option>${CATS.map(c => `<optgroup label="${c.name}">${c.slugs.map(x => `<option value="${x}">${bySlug[x].name}</option>`).join("")}</optgroup>`).join("")}<option value="other">Something else</option></select></div>
-    <div class="field"><label class="label" for="area">City or ZIP you serve *</label><input id="area" name="area" required maxlength="80" autocomplete="postal-code"></div>
+    <div class="two">
+      <div class="field"><label class="label" for="zip">Your ZIP code *</label><input id="zip" name="zip" required maxlength="5" pattern="[0-9]{5}" inputmode="numeric" autocomplete="postal-code" placeholder="e.g. 78704"></div>
+      <div class="field"><label class="label" for="radius">How far you travel</label><select id="radius" name="radius"><option value="10">10 miles</option><option value="25" selected>25 miles</option><option value="50">50 miles</option></select></div>
+    </div>
+    <fieldset class="jobs">
+      <legend class="label">Your jobs and prices</legend>
+      <small class="muted">Tap a common job or type your own, like "Drain cleanout $90" or "Basic car wash $40".</small>
+      <div class="jobchips" id="jobchips"></div>
+      <div id="jobrows"></div>
+      <button type="button" class="addjob" id="addjob">+ Add another job</button>
+    </fieldset>
     <div class="two">
       <div class="field"><label class="label" for="phone">Phone</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div>
       <div class="field"><label class="label" for="email">Email</label><input id="email" name="email" type="email" maxlength="120" autocomplete="email"></div>
@@ -438,10 +466,20 @@ function getListedPage() {
   </form>
 </section>
 <script>
+var JOBS=${JSON.stringify(jobSuggestions()).replace(/</g, "\\u003c")};
 (function(){var q=new URLSearchParams(location.search),s=q.get("service"),e=q.get("error");
 document.getElementById("t").value=Date.now();
 if(s){var o=document.querySelector('#service option[value="'+s.replace(/[^a-z-]/g,"")+'"]');if(o)o.selected=true;}
-if(e){var p=document.getElementById("formerr");p.textContent=e;p.hidden=false;}})();
+if(e){var p=document.getElementById("formerr");p.textContent=e;p.hidden=false;}
+var rows=document.getElementById("jobrows"),chips=document.getElementById("jobchips"),sel=document.getElementById("service"),add=document.getElementById("addjob"),n=0;
+function row(name,ph){if(rows.children.length>=12)return null;n++;var d=document.createElement("div");d.className="jobrow";
+d.innerHTML='<label class="sr" for="jn'+n+'">Job</label><input id="jn'+n+'" name="job_name" maxlength="80" placeholder="Job, e.g. Drain cleanout"><span class="dollar"><label class="sr" for="jp'+n+'">Price in dollars</label><input id="jp'+n+'" name="job_price" inputmode="decimal" maxlength="7" placeholder="Price"></span><button type="button" class="rm" aria-label="Remove this job">&times;</button>';
+d.querySelector("[name=job_name]").value=name||"";var pi=d.querySelector("[name=job_price]");if(ph)pi.placeholder=ph;pi.oninput=function(){pi.value=pi.value.replace(/[^0-9.]/g,"");};
+d.querySelector(".rm").onclick=function(){d.remove();if(!rows.children.length)row();};rows.appendChild(d);add.hidden=rows.children.length>=12;return d;}
+function empty(){var r=rows.querySelectorAll(".jobrow");for(var i=0;i<r.length;i++)if(!r[i].querySelector("[name=job_name]").value)return r[i];return null;}
+function showChips(){var list=JOBS[sel.value]||[];chips.innerHTML="";list.forEach(function(j){var b=document.createElement("button");b.type="button";b.className="jobchip";b.textContent="+ "+j[0];
+b.onclick=function(){var r=empty()||row();if(!r)return;r.querySelector("[name=job_name]").value=j[0];var pr=r.querySelector("[name=job_price]");pr.placeholder="Typical $"+j[1];pr.focus();b.remove();};chips.appendChild(b);});}
+add.onclick=function(){var r=row();if(r)r.querySelector("input").focus();};sel.addEventListener("change",showChips);row();row();showChips();})();
 </script>`;
   return layout({ title: "Get Listed: Free Listing for Local Service Pros | RuffQuote", description: "List your cleaning, lawn, detailing, handyman or repair business on RuffQuote for free and reach homeowners who are checking prices before they hire.", urlPath: "/get-listed/", body });
 }
@@ -475,7 +513,7 @@ if (GUIDES.length) pages["cost-guides/index.html"] = guidesIndexPage();
 pages["get-listed/index.html"] = getListedPage();
 pages["get-listed/thanks/index.html"] = simplePage("/get-listed/thanks/", "Thanks! | RuffQuote", "Your listing request was received.", `
 <h1>Thanks, you're on the list!</h1>
-<p>We got your business details. We'll add your listing to the pages for your service and area, and reach out if we need anything.</p>
+<p>We got your business details. Your listing and prices now show on your service page for customers in your area. We'll reach out if we need anything.</p>
 <p><a href="/">Back to RuffQuote</a></p>`);
 
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -485,7 +523,7 @@ for (const [file, html] of Object.entries(pages)) {
   fs.writeFileSync(p, html);
 }
 fs.mkdirSync(path.join(OUT, "assets"), { recursive: true });
-for (const f of ["services.js", "app.js", "style.css"]) fs.copyFileSync(path.join(__dirname, "src", f), path.join(OUT, "assets", f));
+for (const f of ["services.js", "app.js", "pros.js", "style.css"]) fs.copyFileSync(path.join(__dirname, "src", f), path.join(OUT, "assets", f));
 fs.writeFileSync(path.join(OUT, "favicon.svg"), FAVICON);
 fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 const urls = ["/", ...CATS.map(c => c.path), "/cost-guides/", "/get-listed/", ...SERVICES.map(s => `/${s.slug}/`), ...GUIDES.map(g => `/${g.service}/${g.slug}/`), "/about/", "/privacy/"];
