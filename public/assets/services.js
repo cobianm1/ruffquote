@@ -587,6 +587,49 @@ const SERVICES = [
       ["When is the best time to trim trees?", "Late winter, while trees are dormant, is best for most species. Dead or hazardous limbs can be removed any time."],
       ["Who trims branches near power lines?", "Lines running pole to pole are usually the utility's job, often for free. The line from the pole to your house is often the homeowner's. Call your utility first."]
     ]
+  },
+  {
+    slug: "hvac",
+    name: "HVAC Tune-Up and Repair",
+    noun: "HVAC service", work: "HVAC work",
+    pro: "HVAC tech",
+    lowRate: 75, highRate: 140, minCharge: 100,
+    fields: [
+      { id: "job", label: "Job", type: "chips", default: 0,
+        options: ["AC tune-up", "Furnace tune-up", "AC refrigerant recharge", "Thermostat installation", "Dryer vent cleaning", "Air duct cleaning"] },
+      { id: "size", label: "Home size", type: "chips", default: 1,
+        options: ["Under 1,500 sq ft", "1,500 to 2,500 sq ft", "Over 2,500 sq ft or 2 systems"] },
+      { id: "when", label: "Timing", type: "chips", default: 0,
+        options: ["Regular hours", "Evening, weekend or emergency"] }
+    ],
+    estimate(v) {
+      const hrs = [[1, 1, 1.75], [1, 1.1, 1.9], [1.25, 1.5, 1.75], [1, 1, 1.75], [0.9, 1, 1.25], [3, 4, 6]][v.job][v.size];
+      const sup = [[10, 10, 18], [12, 12, 22], [120, 180, 240], [20, 20, 40], [5, 5, 8], [25, 35, 50]][v.job][v.size];
+      return { hours: hrs * (v.when ? 1.5 : 1), supplies: sup + (v.when ? 60 : 0) };
+    },
+    includes: v => ["Coils cleaned, refrigerant pressures and electrical parts checked, drain line flushed", "Burners, flame sensor and igniter cleaned and checked, safety controls and venting tested", "Leak check, refrigerant added to the correct charge, pressures and temperatures verified", "Old thermostat removed, new one wired, mounted and tested with your system. Thermostat not included", "Vent line brushed and vacuumed from the dryer to the outside cap, airflow checked", "Supply and return ducts cleaned with a vacuum and brushes, registers removed and washed"][v.job] + (v.size === 2 && v.job !== 4 && v.job !== 5 ? ", for both systems" : ""),
+    presets: [
+      ["AC tune-up", "1 system", { job: 0, size: 1, when: 0 }],
+      ["AC tune-up", "2 systems", { job: 0, size: 2, when: 0 }],
+      ["Furnace tune-up", "1 system", { job: 1, size: 1, when: 0 }],
+      ["AC refrigerant recharge", "Small system", { job: 2, size: 0, when: 0 }],
+      ["AC refrigerant recharge", "Average home", { job: 2, size: 1, when: 0 }],
+      ["Thermostat installation", "1 thermostat", { job: 3, size: 1, when: 0 }],
+      ["Dryer vent cleaning", "Regular hours", { job: 4, size: 1, when: 0 }],
+      ["Air duct cleaning", "Average home", { job: 5, size: 1, when: 0 }],
+      ["Air duct cleaning", "Large home", { job: 5, size: 2, when: 0 }]
+    ],
+    factors: [
+      "The job. A tune-up is about an hour. Duct cleaning can take most of a day.",
+      "Refrigerant. It is sold by the pound, and older or larger systems can need several pounds.",
+      "System size. Bigger homes have more ductwork, and two systems mean two tune-ups.",
+      "Timing. Evenings, weekends and emergencies in peak heat or cold often cost 1.5 to 2 times more.",
+      "Repairs found. Capacitors, motors and other parts found during a visit are priced on top."
+    ],
+    faq: [
+      ["How often should I get my HVAC system serviced?", "Most makers suggest a check once a year for each system: the AC in spring and the furnace in fall. A heat pump does both jobs, so it benefits from two visits a year."],
+      ["Does my AC need refrigerant every year?", "No. Refrigerant runs in a sealed loop. If it is low, there is a leak, and a good tech will look for it instead of just topping it off."]
+    ]
   }
 ];
 

@@ -60,6 +60,12 @@ module.exports = {
     ["Closet auger", "The right tool for toilet clogs.", "closet auger toilet professional"],
     ["Drain cleaning gloves", "Keeps your hands safe on cable jobs.", "drain cleaning gloves"]
   ],
+  "hvac": [
+    ["Digital refrigerant manifold gauges", "Read pressures, superheat and subcooling on every service call.", "digital refrigerant manifold gauge set"],
+    ["Refrigerant leak detector", "Find the leak before you recharge, so the fix lasts.", "refrigerant leak detector"],
+    ["Clamp meter with capacitor test", "Checks amps, voltage and capacitors in one tool.", "hvac clamp meter capacitance"],
+    ["Fin comb set", "Straightens bent coil fins during a tune-up.", "ac fin comb set"]
+  ],
   "handyman": [
     ["Cordless combo kit", "Drill, impact and saw on one battery system.", "cordless combo kit drill impact saw"],
     ["Laser level", "Hang TVs and shelves straight on the first try.", "laser level self leveling"],

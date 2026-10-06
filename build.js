@@ -20,7 +20,7 @@ const bySlug = Object.fromEntries(SERVICES.map(s => [s.slug, s]));
 const CATS = [
   { key: "home", name: "Home services", path: "/home-services/", blurb: "Cleaning, yard work, repairs and more around the house.", groups: [
     ["Outside the house", ["pressure-washing", "window-cleaning", "gutter-cleaning", "lawn-mowing", "tree-trimming", "trash-can-cleaning", "christmas-light-installation"]],
-    ["Inside and repairs", ["house-cleaning", "carpet-cleaning", "interior-painting", "junk-removal", "drain-cleaning", "handyman"]]
+    ["Inside and repairs", ["house-cleaning", "carpet-cleaning", "interior-painting", "junk-removal", "drain-cleaning", "hvac", "handyman"]]
   ] },
   { key: "car", name: "Car services", path: "/car-services/", blurb: "Detailing, oil changes, brakes and other car care.", groups: [
     ["Car care", ["car-detailing", "mobile-mechanic"]]

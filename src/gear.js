@@ -54,6 +54,12 @@ module.exports = {
     ["Hair catcher", "Stops hair from clogging shower and tub drains.", "shower drain hair catcher"],
     ["Enzyme drain cleaner", "Monthly upkeep that's gentler on pipes than harsh chemicals.", "enzyme drain cleaner"]
   ],
+  "hvac": [
+    ["Pleated furnace filters", "Change them every one to three months for better airflow. Match the size printed on your old filter.", "pleated furnace air filter merv 8"],
+    ["Programmable thermostat", "Sets heating and cooling schedules so you're not paying to cool an empty house.", "programmable thermostat"],
+    ["Dryer vent cleaning kit", "Flexible brush rods that clean the vent line from the dryer to the outside.", "dryer vent cleaning kit"],
+    ["Coil cleaner spray", "Foaming cleaner for rinsing dirt off the outdoor AC unit's fins with the power off.", "ac condenser coil cleaner foaming"]
+  ],
   "handyman": [
     ["Cordless drill set", "The tool you'll reach for on almost every small job.", "cordless drill driver set"],
     ["Stud finder", "Find studs before mounting a TV or shelves.", "stud finder"],
