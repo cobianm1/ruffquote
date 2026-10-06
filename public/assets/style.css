@@ -253,3 +253,23 @@ details p{margin:8px 0 0}
 .pros-tip{background:var(--soft);border-radius:10px;padding:12px 14px;display:grid;gap:4px;font-size:14px}
 .pros-tip b{font-size:15px}
 .pros-tip ul{margin:2px 0 0;padding-left:20px;display:grid;gap:2px}
+/* DIY: make the do-it-yourself path stand out */
+.diybox{background:#fff6dc;border:2px solid #f2b632;border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.diybox-head{display:grid;gap:2px}
+.diybox-head b{font:700 21px/1.15 var(--display);color:#1b2428}
+.diybox-head span{font-size:14px;color:#5a4a1e}
+.diybox-links{display:flex;flex-wrap:wrap;gap:8px}
+.diybox-links a{background:#f2b632;color:#1b2428;border-radius:999px;padding:7px 13px;font-weight:700;font-size:14px;text-decoration:none}
+.diybox-links a:hover{background:#e0a21a}
+.diybox-all{font-weight:700;font-size:14px;color:#7a4a12}
+.diybox small{color:#6d5d33;font-size:12px}
+.diyband{background:#fff6dc;border:2px solid #f2b632;border-radius:16px;padding:22px 20px}
+.diyband h2{font-size:30px}
+.diy-tag{display:inline-block;justify-self:start;background:#f2b632;color:#1b2428;font:700 13px var(--display);letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:4px 12px}
+.diy-intro{margin:0;max-width:70ch;color:#3d3420}
+.diyband .disclose{color:#6d5d33}
+@media (prefers-color-scheme: dark){
+  .diybox,.diyband{background:#2b2410;border-color:#8a6a1c}
+  .diybox-head b{color:#f6e6b8}.diybox-head span,.diy-intro,.diybox small,.diyband .disclose{color:#d9c99a}
+  .diybox-all{color:#f6d77e}
+}

@@ -70,11 +70,12 @@ function svcCard(s) {
 
 // Amazon search links with our Associates tag; disclosure shown with every block
 const amazonUrl = q => `https://www.amazon.com/s?k=${encodeURIComponent(q).replace(/%20/g, "+")}&tag=${AMAZON_TAG}`;
-function gearBlock(slug, heading, set = GEAR, id = "gear") {
+function gearBlock(slug, heading, set = GEAR, id = "gear", intro = "") {
   const items = set[slug];
   if (!items) return "";
-  return `<section class="gear" id="${id}">
-  <h2>${heading}</h2>
+  const diy = set === GEAR;
+  return `<section class="gear${diy ? " diyband" : ""}" id="${id}">
+  ${diy ? `<div class="diy-tag">🛠 Do it yourself</div>` : ""}<h2>${heading}</h2>${intro ? `<p class="diy-intro">${intro}</p>` : ""}
   <div class="gear-grid">${items.map(([name, why, q]) => `<a class="gear-item" href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener"><b>${esc(name)}</b><span>${esc(why)}</span><em>See options on Amazon →</em></a>`).join("")}</div>
   <p class="disclose">As an Amazon Associate, RuffQuote earns from qualifying purchases. It doesn't change your price.</p>
 </section>`;
@@ -84,6 +85,7 @@ function gearBlock(slug, heading, set = GEAR, id = "gear") {
 function gearQuick(slug, set = GEAR, id = "gear", lead = "<b>Doing it yourself?</b> Top picks on Amazon:") {
   const items = (set[slug] || []).slice(0, 3);
   if (!items.length) return "";
+  if (set === GEAR) return `<div class="diybox"><div class="diybox-head"><b>🛠 Rather do it yourself?</b><span>Skip the labor bill. Here's the gear for the job:</span></div><div class="diybox-links">${items.map(([name, , q]) => `<a href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener">${esc(name)}</a>`).join("")}</div><a class="diybox-all" href="#${id}">See the full DIY gear list ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>`;
   return `<div class="quickshop">${lead} ${items.map(([name, , q]) => `<a href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener">${esc(name)}</a>`).join("")}<a class="more" href="#${id}">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>`;
 }
 
@@ -173,15 +175,15 @@ function servicePage(s) {
         <div class="rangelabels" aria-hidden="true"><span>Newer pro</span><span>Typical</span><span>Experienced pro</span></div>
       </div>
       <div class="note" id="includes"></div>
+      ${gearQuick(s.slug)}
       <div class="pros" data-service="${s.slug}" data-pro="${s.pro}" data-pros="${proPlural}">
         <div class="pros-top"><b>${proPlural[0].toUpperCase() + proPlural.slice(1)} <span class="pros-where">near you</span></b>
           <form class="pros-zip"><label class="sr" for="zip-${s.slug}">Your ZIP code</label><input id="zip-${s.slug}" name="zip" inputmode="numeric" maxlength="5" placeholder="ZIP"><button type="submit">Go</button></form></div>
         <div class="pros-list" aria-live="polite"><p class="muted">Looking for ${proPlural} near you…</p></div>
       </div>
-      ${gearQuick(s.slug)}
     </div>
   </div>
-  ${gearBlock(s.slug, `Doing some of it yourself? Handy gear for ${esc(work)}`)}
+  ${gearBlock(s.slug, `Gear for doing ${esc(work)} yourself`, GEAR, "gear", "Handy with tools? These picks make the job easier. Not sure DIY is worth it? Our cost guides cover when to do it yourself and when to call a pro.")}
   <div class="split">
   <div class="prose">
     <h2>What affects the price of ${work}</h2>
@@ -343,7 +345,7 @@ ${photo(pic(s.slug, 1), { cls: "guide-img", sizes: "(min-width:1072px) 1040px, 1
   </table></div>
   <p class="muted">Labor and basic supplies. Big parts or appliances you buy yourself are extra. Prices run higher in big cities.</p>
 </section>
-${gearBlock(s.slug, "Gear that helps")}
+${gearBlock(s.slug, "Do it yourself or hire a pro?", GEAR, "gear", esc(g.diy))}
 <section class="card pros-section">${(() => { const proPlural = plural(s.pro); return `<div class="pros" data-service="${s.slug}" data-pro="${s.pro}" data-pros="${proPlural}">
         <div class="pros-top"><b>${proPlural[0].toUpperCase() + proPlural.slice(1)} <span class="pros-where">near you</span></b>
           <form class="pros-zip"><label class="sr" for="zip-${s.slug}">Your ZIP code</label><input id="zip-${s.slug}" name="zip" inputmode="numeric" maxlength="5" placeholder="ZIP"><button type="submit">Go</button></form></div>
@@ -361,10 +363,6 @@ ${gearBlock(s.slug, "Gear that helps")}
     <ul>${g.tips.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
   </aside>
 </div>
-<section class="prose">
-  <h2>Do it yourself or hire a pro?</h2>
-  <p>${esc(g.diy)}</p>
-</section>
 
 <section class="prose faq">
   <h2>Common questions</h2>
