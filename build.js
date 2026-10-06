@@ -43,6 +43,9 @@ const PRO_GEAR = require("./src/progear.js");
 const AMAZON_TAG = "ruffquote-20";
 let GUIDES = [];
 try { GUIDES = require("./src/guides.js"); } catch (e) { if (e.code !== "MODULE_NOT_FOUND") throw e; }
+// Extra guide batches: src/guides-<name>.js, each exporting an array like guides.js
+for (const f of fs.readdirSync(path.join(__dirname, "src")).filter(f => /^guides-[\w-]+\.js$/.test(f)).sort()) GUIDES = GUIDES.concat(require(`./src/${f}`));
+{ const seen = new Set(); for (const g of GUIDES) { const k = `${g.service}/${g.slug}`; if (seen.has(k)) throw new Error(`Duplicate guide ${k}`); seen.add(k); } }
 
 // Price range for a job (default inputs if no v), same formula as the browser calculator
 function typicalRange(s, v) {
