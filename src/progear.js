@@ -6,6 +6,42 @@ module.exports = {
     ["Portable water tank", "Lets you wash anywhere without a customer's hose.", "mobile detailing water tank"],
     ["Bulk microfiber towels", "You'll go through dozens a day. Buy in bulk.", "microfiber towels bulk 100 pack"]
   ],
+  "window-tinting": [
+    ["Tint heat gun", "Shrinks film to fit curved back glass.", "heat gun window tint"],
+    ["Tint squeegee and tool set", "Hard cards, conquerors and turbo squeegees for clean installs.", "window tint squeegee tool set professional"],
+    ["Tint meter", "Shows customers their tint is legal before they leave.", "window tint meter vlt"],
+    ["Snap-off knife blades", "Fresh blades for every car keep cuts clean.", "snap off blade knife 9mm"]
+  ],
+  "ceramic-coating": [
+    ["Long-throw dual-action polisher", "Faster correction on big panels.", "long throw dual action polisher 21mm"],
+    ["Paint depth gauge", "Measure clear coat before you cut, so you never burn through.", "paint thickness gauge car"],
+    ["Detailing inspection light", "Shows swirls and high spots in coating.", "detailing swirl finder light"],
+    ["Polishing pads and compounds", "Cutting and finishing pads with matching compounds.", "polishing pads compound kit dual action"]
+  ],
+  "paintless-dent-repair": [
+    ["PDR rod set", "Push rods for working dents from behind panels.", "paintless dent repair rods set"],
+    ["PDR glue pulling kit", "Tabs, slide hammer and mini lifter for no-access dents.", "pdr glue pulling kit professional"],
+    ["PDR LED light board", "Reflection light to read dents on the panel.", "pdr led line board light"],
+    ["Knockdown and tap down set", "Levels high spots for a flat finish.", "pdr tap down knockdown set"]
+  ],
+  "windshield-repair": [
+    ["Windshield repair bridge kit", "Injector, resin and curing light for chip and crack repair.", "professional windshield repair kit bridge"],
+    ["Cold knife and cut-out tools", "Cuts the old urethane bead for replacements.", "windshield removal cold knife tool"],
+    ["Windshield suction cups", "Safe lifting and setting of new glass.", "windshield glass suction cup lifter"],
+    ["Urethane caulk gun", "Lays an even urethane bead.", "urethane caulking gun windshield"]
+  ],
+  "mobile-tire-service": [
+    ["Portable tire changer", "Mounts tires on the road without a shop machine.", "portable tire changer"],
+    ["Wheel balancer", "Balances wheels in your van.", "wheel balancer machine"],
+    ["Cordless impact wrench", "Removes lug nuts fast, then finish with a torque wrench.", "cordless impact wrench 1/2"],
+    ["TPMS programming tool", "Programs and relearns sensors for most cars.", "tpms programming tool"]
+  ],
+  "towing": [
+    ["Lockout tool kit", "Air wedge, long-reach tool and pads for opening cars without damage.", "car lockout kit air wedge long reach"],
+    ["Commercial jump pack", "Starts trucks and big engines on the road.", "commercial jump starter 12v 24v"],
+    ["Wheel dollies", "Moves cars out of tight spots and garages.", "car wheel dolly set"],
+    ["Ratchet tie-down straps", "Secures cars on a flatbed.", "car tie down straps flatbed wheel"]
+  ],
   "pressure-washing": [
     ["Gas pressure washer (4 GPM)", "More flow cleans flatwork much faster than electric.", "gas pressure washer 4 gpm"],
     ["20-inch surface cleaner", "Cuts driveway time in half with no stripes.", "20 inch surface cleaner pressure washer"],

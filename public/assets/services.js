@@ -630,6 +630,264 @@ const SERVICES = [
       ["How often should I get my HVAC system serviced?", "Most makers suggest a check once a year for each system: the AC in spring and the furnace in fall. A heat pump does both jobs, so it benefits from two visits a year."],
       ["Does my AC need refrigerant every year?", "No. Refrigerant runs in a sealed loop. If it is low, there is a leak, and a good tech will look for it instead of just topping it off."]
     ]
+  },
+  {
+    slug: "window-tinting",
+    name: "Window Tinting",
+    noun: "window tinting",
+    pro: "tint installer",
+    lowRate: 45, highRate: 80, minCharge: 60,
+    fields: [
+      { id: "job", label: "Windows", type: "chips", default: 1,
+        options: ["2 front side windows", "All sides and back window", "Sides, back and windshield strip", "Windshield strip only"] },
+      { id: "vehicle", label: "Vehicle", type: "chips", default: 0,
+        options: ["Coupe or sedan", "SUV or truck", "Minivan or large SUV"] },
+      { id: "film", label: "Film", type: "chips", default: 0,
+        options: ["Dyed or carbon film", "Ceramic film"] }
+    ],
+    estimate(v) {
+      const size = [1, 1.2, 1.4][v.vehicle];
+      const strip = v.job === 3 ? 0 : 1;
+      const hrs = [0.9, 2.5, 2.9, 0.5][v.job] * (strip ? size : 1);
+      const sup = [14, 40, 48, 8][v.job] * (strip ? size : 1) * (v.film ? 4.5 : 1);
+      return { hours: hrs, supplies: sup };
+    },
+    includes: v => ["Old film checked, glass cleaned, and new film cut and installed on the two front door windows", "Glass cleaned, and new film cut and installed on every side window and the back window", "Film on every side window and the back window, plus a sun strip across the top of the windshield", "Sun strip cut and installed across the top of the windshield"][v.job] + (v.film ? ", with ceramic film that blocks more heat" : ", with dyed or carbon film"),
+    presets: [
+      ["2 front windows", "Carbon film", { job: 0, vehicle: 0, film: 0 }],
+      ["2 front windows", "Ceramic film", { job: 0, vehicle: 0, film: 1 }],
+      ["Sides and back", "Sedan, carbon film", { job: 1, vehicle: 0, film: 0 }],
+      ["Sides and back", "Sedan, ceramic film", { job: 1, vehicle: 0, film: 1 }],
+      ["Sides and back", "SUV or truck, carbon film", { job: 1, vehicle: 1, film: 0 }],
+      ["Sides and back", "SUV or truck, ceramic film", { job: 1, vehicle: 1, film: 1 }],
+      ["Sides, back and windshield strip", "Sedan, ceramic film", { job: 2, vehicle: 0, film: 1 }],
+      ["Windshield strip", "Carbon film", { job: 3, vehicle: 0, film: 0 }]
+    ],
+    factors: [
+      "Number of windows. Most shops price the two front windows, the full car, and a windshield strip separately.",
+      "Film type. Ceramic film blocks more heat and costs several times more than dyed or carbon film.",
+      "Vehicle. SUVs, vans and cars with curved back glass have more glass and take longer.",
+      "Old tint. Removing faded or bubbling film and its glue can add an hour or more.",
+      "Warranty. Better shops use name-brand film with a lifetime warranty against fading and peeling."
+    ],
+    faq: [
+      ["How dark can my tint be?", "It depends on your state. Each state sets limits for the front side windows, back windows and windshield, so ask the shop what is legal where you live before you pick a shade."],
+      ["How long before I can roll the windows down?", "Most installers say to keep the windows up for three to five days while the film dries and sticks to the glass."]
+    ]
+  },
+  {
+    slug: "ceramic-coating",
+    name: "Ceramic Coating",
+    noun: "ceramic coating",
+    pro: "detailer",
+    lowRate: 45, highRate: 85, minCharge: 150,
+    fields: [
+      { id: "level", label: "Protection", type: "chips", default: 1,
+        options: ["1-year spray sealant", "2 to 3 year coating", "5-year+ coating with paint correction"] },
+      { id: "vehicle", label: "Vehicle", type: "chips", default: 0,
+        options: ["Sedan", "SUV", "Truck or van"] },
+      { id: "paint", label: "Paint condition", type: "chips", default: 0,
+        options: ["Good or new", "Light swirls", "Heavy swirls and scratches"] }
+    ],
+    estimate(v) {
+      const size = [1, 1.2, 1.35][v.vehicle];
+      const hrs = ([2.5, 7, 14][v.level] + [0, 1.5, 4][v.paint] * [0.25, 1, 1.25][v.level]) * size;
+      const sup = [30, 120, 180][v.level] * size;
+      return { hours: hrs, supplies: sup };
+    },
+    includes: v => ["Hand wash, clay bar and a spray sealant on the paint, wheels and glass", "Hand wash, iron and clay decontamination, a one-step polish and a 2 to 3 year coating on the paint", "Hand wash, full decontamination, multi-step paint correction and a 5-year or longer coating on paint, wheels and trim"][v.level],
+    presets: [
+      ["1-year spray sealant", "Sedan", { level: 0, vehicle: 0, paint: 0 }],
+      ["1-year spray sealant", "SUV", { level: 0, vehicle: 1, paint: 0 }],
+      ["2 to 3 year coating", "Sedan", { level: 1, vehicle: 0, paint: 0 }],
+      ["2 to 3 year coating", "SUV", { level: 1, vehicle: 1, paint: 0 }],
+      ["2 to 3 year coating", "Truck or van", { level: 1, vehicle: 2, paint: 1 }],
+      ["5-year coating and paint correction", "Sedan", { level: 2, vehicle: 0, paint: 1 }],
+      ["5-year coating and paint correction", "SUV", { level: 2, vehicle: 1, paint: 1 }],
+      ["5-year coating and paint correction", "SUV, heavy swirls", { level: 2, vehicle: 1, paint: 2 }]
+    ],
+    factors: [
+      "Coating level. Longer-lasting coatings need more prep and cost more per bottle.",
+      "Paint correction. Swirls and scratches are polished out before coating, and that is most of the labor.",
+      "Vehicle size. SUVs and trucks have more paint to prep and coat.",
+      "Extras. Wheels, glass, trim and interior coatings are often priced as add-ons.",
+      "Certified installers. Some brands only sell their top coatings through trained shops, with a warranty."
+    ],
+    faq: [
+      ["Is ceramic coating worth it?", "It makes the car easier to wash and helps the paint resist water spots, bird droppings and fading. It will not stop rock chips or deep scratches, so it is not a replacement for careful driving or paint protection film."],
+      ["Why does paint correction cost so much?", "Every panel is machine polished, often in two or more steps, to remove swirls before the coating locks the finish in. On a car with lots of swirls that can take a full day or more."]
+    ]
+  },
+  {
+    slug: "paintless-dent-repair",
+    name: "Paintless Dent Repair",
+    noun: "paintless dent repair", work: "dent repair",
+    pro: "dent technician",
+    lowRate: 75, highRate: 125, minCharge: 100,
+    fields: [
+      { id: "job", label: "Damage", type: "chips", default: 0,
+        options: ["Door dings or dents", "Light hail", "Moderate hail", "Heavy hail"] },
+      { id: "dents", label: "Number of dents", type: "number", unit: "dents", default: 1, min: 1, max: 20, step: 1,
+        help: "For door dings and dents. Hail jobs are priced for the whole car, so this is ignored." },
+      { id: "size", label: "Dent size", type: "chips", default: 0,
+        options: ["Small (dime to quarter)", "Medium (up to golf ball)", "Large (up to baseball)"] }
+    ],
+    estimate(v) {
+      if (v.job === 0) {
+        const first = [0.75, 1.25, 2.25][v.size];
+        return { hours: first + (v.dents - 1) * first * 0.6, supplies: 5 };
+      }
+      const hrs = [14, 28, 55][v.job - 1] * [0.85, 1, 1.3][v.size];
+      return { hours: hrs, supplies: 20 };
+    },
+    includes: v => v.job === 0 ? "Dents pushed out from behind the panel with PDR tools, with glue pulling where there is no access, and the factory paint kept" : "Every hail dent on the roof, hood, trunk and other panels worked out with PDR tools, and the factory paint kept",
+    presets: [
+      ["1 small dent", "Door ding", { job: 0, dents: 1, size: 0 }],
+      ["1 medium dent", "Golf ball size", { job: 0, dents: 1, size: 1 }],
+      ["1 large dent", "Baseball size", { job: 0, dents: 1, size: 2 }],
+      ["3 small dents", "Door dings", { job: 0, dents: 3, size: 0 }],
+      ["Light hail damage", "Whole car", { job: 1, dents: 1, size: 0 }],
+      ["Moderate hail damage", "Whole car", { job: 2, dents: 1, size: 1 }],
+      ["Heavy hail damage", "Whole car", { job: 3, dents: 1, size: 1 }]
+    ],
+    factors: [
+      "Size. A dime-sized ding takes minutes. A baseball-sized dent can take a couple of hours.",
+      "Number of dents. The first dent costs the most. Each extra dent on the same visit usually costs less.",
+      "Location. Dents on body lines, panel edges or braced areas are harder to reach and slower.",
+      "Hail. Hail jobs are priced by how many dents are on each panel and how big they are.",
+      "Paint. If the paint is cracked or chipped, PDR alone will not fix it, and a body shop may be needed."
+    ],
+    faq: [
+      ["What is paintless dent repair?", "A technician uses metal rods and glue tabs to slowly push or pull the dent back into shape. The factory paint stays on, so there is no filler, sanding or repainting."],
+      ["Does insurance pay for hail damage?", "If you have comprehensive coverage, hail damage is usually covered after your deductible. Many insurers work with PDR shops for hail repair, so ask your agent before you book."]
+    ]
+  },
+  {
+    slug: "windshield-repair",
+    name: "Windshield Repair and Replacement",
+    noun: "windshield repair", work: "windshield work",
+    pro: "auto glass tech",
+    lowRate: 45, highRate: 80, minCharge: 60,
+    fields: [
+      { id: "job", label: "Job", type: "chips", default: 0,
+        options: ["Chip repair", "Crack repair (under 6 inches)", "Windshield replacement"] },
+      { id: "vehicle", label: "Vehicle", type: "chips", default: 0,
+        options: ["Car", "SUV, truck or van", "Luxury or high-end"] },
+      { id: "adas", label: "Camera recalibration", type: "chips", default: 0,
+        options: ["Not needed", "Needed (lane or braking camera)"] }
+    ],
+    estimate(v) {
+      if (v.job < 2) return { hours: [0.75, 1][v.job], supplies: [15, 20][v.job] };
+      const cal = v.adas ? 1 : 0;
+      return { hours: [2, 2.25, 2.5][v.vehicle] + cal * 1.25, supplies: [220, 300, 600][v.vehicle] + cal * 150 };
+    },
+    includes: v => v.job < 2 ? ["Chip cleaned, filled with resin under pressure, cured and polished smooth", "Crack cleaned, filled with resin along its length, cured and polished smooth"][v.job] + ". Recalibration is not needed for a repair" : "Old windshield cut out, new glass set in fresh urethane, moldings replaced and the glass cleaned. Glass included" + (v.adas ? ", with the windshield camera recalibrated" : ""),
+    presets: [
+      ["Chip repair", "Any vehicle", { job: 0, vehicle: 0, adas: 0 }],
+      ["Crack repair", "Under 6 inches", { job: 1, vehicle: 0, adas: 0 }],
+      ["Windshield replacement", "Car", { job: 2, vehicle: 0, adas: 0 }],
+      ["Windshield replacement", "Car, with camera recalibration", { job: 2, vehicle: 0, adas: 1 }],
+      ["Windshield replacement", "SUV, truck or van", { job: 2, vehicle: 1, adas: 0 }],
+      ["Windshield replacement", "SUV, with camera recalibration", { job: 2, vehicle: 1, adas: 1 }],
+      ["Windshield replacement", "Luxury, with camera recalibration", { job: 2, vehicle: 2, adas: 1 }]
+    ],
+    factors: [
+      "Repair or replace. A chip or short crack can usually be filled. Long cracks or damage in the driver's view need new glass.",
+      "The glass. Rain sensors, heated glass, heads-up displays and acoustic glass all cost more.",
+      "Camera recalibration. Cars with lane-keeping or automatic braking cameras need them recalibrated after a new windshield.",
+      "Factory or aftermarket. Glass from the carmaker usually costs more than aftermarket glass that meets the same safety standard.",
+      "Insurance. Many policies with comprehensive coverage pay for chip repair, and some pay for replacement with no deductible."
+    ],
+    faq: [
+      ["Should I repair or replace my windshield?", "Chips smaller than a quarter and cracks shorter than about six inches can usually be repaired if they are not in the driver's line of sight. Bigger damage, or a crack that reaches the edge of the glass, usually means replacement."],
+      ["How soon can I drive after a new windshield?", "It depends on the urethane. Many techs say to wait at least an hour, and some products need longer. Ask your installer for the safe drive-away time."]
+    ]
+  },
+  {
+    slug: "mobile-tire-service",
+    name: "Mobile Tire Service",
+    noun: "mobile tire service",
+    pro: "mobile tire tech",
+    lowRate: 50, highRate: 90, minCharge: 60,
+    fields: [
+      { id: "job", label: "Job", type: "chips", default: 0,
+        options: ["Flat repair (plug and patch)", "Spare tire swap", "Mount and balance your tires", "TPMS sensor replacement"] },
+      { id: "tires", label: "Number of tires", type: "number", unit: "tires", default: 1, min: 1, max: 4, step: 1,
+        help: "For flat repairs, mounting and balancing, or sensors. A spare swap is always one tire." },
+      { id: "vehicle", label: "Vehicle", type: "chips", default: 0,
+        options: ["Car", "SUV or light truck", "Large wheels (20 inch and up)"] }
+    ],
+    estimate(v) {
+      const k = [1, 1.15, 1.4][v.vehicle];
+      const n = v.job === 1 ? 1 : v.tires;
+      const hrs = [0.35 + 0.3 * n, 0.6, 0.4 + 0.45 * n, 0.4 + 0.35 * n][v.job] * k;
+      const sup = [10 * n, 0, 8 * n * k, 45 * n][v.job];
+      return { hours: hrs, supplies: sup };
+    },
+    includes: v => ["Tire taken off the wheel, plugged and patched from the inside, balanced and set to the right pressure", "Flat tire taken off and your spare put on, lug nuts tightened and spare pressure checked", "Old tires taken off, your new tires mounted with new valve stems, balanced and torqued. Tires not included", "Old sensor replaced with a new one, programmed to your car and tested"][v.job] + ", done where your car is parked",
+    presets: [
+      ["Flat repair", "1 tire", { job: 0, tires: 1, vehicle: 0 }],
+      ["Spare tire swap", "Any vehicle", { job: 1, tires: 1, vehicle: 0 }],
+      ["Mount and balance", "1 tire", { job: 2, tires: 1, vehicle: 0 }],
+      ["Mount and balance", "4 tires, car", { job: 2, tires: 4, vehicle: 0 }],
+      ["Mount and balance", "4 tires, SUV or light truck", { job: 2, tires: 4, vehicle: 1 }],
+      ["Mount and balance", "4 tires, 20 inch wheels and up", { job: 2, tires: 4, vehicle: 2 }],
+      ["TPMS sensor", "1 sensor", { job: 3, tires: 1, vehicle: 0 }],
+      ["TPMS sensors", "4 sensors", { job: 3, tires: 4, vehicle: 0 }]
+    ],
+    factors: [
+      "Coming to you. Mobile techs bring a tire machine and balancer in a van, so prices include travel.",
+      "Number of tires. Mounting four tires on one visit costs much less per tire than one at a time.",
+      "Wheel size. Large, low-profile and run-flat tires take longer and need more care to avoid scratching wheels.",
+      "Sensors. TPMS sensors are priced per wheel, plus programming them to the car.",
+      "Tires. Tires you buy yourself are not included. Ask about disposal fees for the old ones."
+    ],
+    faq: [
+      ["Can every flat tire be repaired?", "No. A puncture in the tread up to about a quarter inch can usually be plugged and patched. Holes in the sidewall or shoulder, or a tire that was driven flat, mean a new tire."],
+      ["Can I buy tires online and have them installed?", "Yes. Many mobile tire techs will mount and balance tires you ship to your home. Check that the size matches what is on your door sticker."]
+    ]
+  },
+  {
+    slug: "towing",
+    name: "Towing and Roadside Help",
+    noun: "towing or roadside help", work: "towing and roadside work",
+    pro: "tow operator",
+    lowRate: 60, highRate: 100, minCharge: 60,
+    fields: [
+      { id: "job", label: "What you need", type: "chips", default: 3,
+        options: ["Jump start", "Lockout", "Fuel delivery", "Tow"] },
+      { id: "miles", label: "Tow distance", type: "number", unit: "miles", default: 10, min: 1, max: 150, step: 1,
+        help: "Miles from where the car is to where it's going. Only used for a tow." },
+      { id: "when", label: "Timing", type: "chips", default: 0,
+        options: ["Regular hours", "Night, weekend or holiday"] }
+    ],
+    estimate(v) {
+      const k = v.when ? 1.35 : 1;
+      if (v.job < 3) return { hours: 0.75 * k, supplies: [5, 5, 15][v.job] };
+      return { hours: (1 + v.miles / 30) * k, supplies: 10 + v.miles * 1.2 };
+    },
+    includes: v => ["Driver comes to you and jump starts the battery, then checks that the car stays running", "Driver comes to you and opens the car with lockout tools, without damaging the door or window", "Driver brings a couple of gallons of fuel, enough to reach a gas station. Fuel may be billed separately", "Car hooked up or loaded on a flatbed and towed " + v.miles + " miles to the shop or address you choose"][v.job],
+    presets: [
+      ["Jump start", "Regular hours", { job: 0, miles: 10, when: 0 }],
+      ["Lockout", "Regular hours", { job: 1, miles: 10, when: 0 }],
+      ["Fuel delivery", "Regular hours", { job: 2, miles: 10, when: 0 }],
+      ["Tow", "10 miles", { job: 3, miles: 10, when: 0 }],
+      ["Tow", "25 miles", { job: 3, miles: 25, when: 0 }],
+      ["Tow", "50 miles", { job: 3, miles: 50, when: 0 }],
+      ["Tow", "10 miles, night or weekend", { job: 3, miles: 10, when: 1 }],
+      ["Jump start", "Night or weekend", { job: 0, miles: 10, when: 1 }]
+    ],
+    factors: [
+      "Distance. Most tows are a hookup fee plus a charge per mile.",
+      "Timing. Nights, weekends and holidays often cost more.",
+      "Vehicle. Big trucks, all-wheel-drive cars that need a flatbed, and lowered cars can cost more.",
+      "Situation. Cars in a ditch, a tight parking garage or off the road need winching and extra time.",
+      "Roadside plans. Car insurance, new-car warranties and auto clubs often cover jump starts, lockouts and short tows."
+    ],
+    faq: [
+      ["Should I check my roadside coverage first?", "Yes. Many car insurance policies, auto clubs, new-car warranties and some credit cards include towing and roadside help. A quick call can save you the whole bill."],
+      ["Does my car need a flatbed?", "All-wheel-drive cars, many electric cars and low sports cars are usually best moved on a flatbed. Tell the dispatcher your make and model so they send the right truck."]
+    ]
   }
 ];
 

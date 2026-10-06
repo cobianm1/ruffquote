@@ -22,8 +22,9 @@ const CATS = [
     ["Outside the house", ["pressure-washing", "window-cleaning", "gutter-cleaning", "lawn-mowing", "tree-trimming", "trash-can-cleaning", "christmas-light-installation"]],
     ["Inside and repairs", ["house-cleaning", "carpet-cleaning", "interior-painting", "junk-removal", "drain-cleaning", "hvac", "handyman"]]
   ] },
-  { key: "car", name: "Car services", path: "/car-services/", blurb: "Detailing, oil changes, brakes and other car care.", groups: [
-    ["Car care", ["car-detailing", "mobile-mechanic"]]
+  { key: "car", name: "Car services", path: "/car-services/", blurb: "Detailing, tinting, oil changes, glass, tires, towing and other car care.", groups: [
+    ["Care and looks", ["car-detailing", "ceramic-coating", "window-tinting", "paintless-dent-repair"]],
+    ["Repairs and roadside", ["mobile-mechanic", "mobile-tire-service", "windshield-repair", "towing"]]
   ] }
 ];
 CATS.forEach(c => { c.groups = c.groups.map(([g, slugs]) => [g, slugs.filter(x => bySlug[x])]); c.slugs = c.groups.flatMap(([, x]) => x); });

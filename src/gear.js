@@ -6,6 +6,40 @@ module.exports = {
     ["Car vacuum", "A cordless or shop vac makes floor mats and seats quick.", "cordless car vacuum"],
     ["Ceramic spray coating", "Easy shine and water beading that lasts for months.", "ceramic spray coating car"]
   ],
+  "window-tinting": [
+    ["Pre-cut window tint kit", "Film cut to fit your make and model, so you skip the hardest part of a DIY job.", "precut window tint kit car"],
+    ["Tint installation tool kit", "Squeegees, a hard card and a utility knife for laying film flat.", "window tint installation tool kit"],
+    ["Tint remover and razor scraper", "Helps lift old, purple or bubbling film and its glue.", "window tint removal razor scraper"],
+    ["Tint meter", "Checks the light your windows let through against your state's limit.", "window tint meter vlt"]
+  ],
+  "ceramic-coating": [
+    ["Ceramic spray coating", "The easiest way to add gloss and water beading after a wash.", "ceramic spray coating car"],
+    ["Clay bar kit", "Pulls bonded grime off the paint so a coating sticks better.", "clay bar kit car"],
+    ["Iron remover spray", "Dissolves brake dust and rail dust before you polish or coat.", "iron remover car paint"],
+    ["Dual-action polisher", "Removes light swirls safely. Practice on a spare panel first.", "dual action polisher car"]
+  ],
+  "paintless-dent-repair": [
+    ["Glue puller dent kit", "Pulls shallow dings from the outside without removing panels.", "paintless dent repair glue puller kit"],
+    ["Dent lineboard light", "Shows the dent's shape so you can tell when it's flat.", "pdr line board light"],
+    ["Hot glue gun for PDR", "A hotter glue gun helps the tabs grip the panel.", "pdr hot glue gun"]
+  ],
+  "windshield-repair": [
+    ["Windshield chip repair kit", "Fills small chips with resin before they spread into cracks.", "windshield chip repair kit"],
+    ["Clear windshield tape", "Covers a fresh chip to keep dirt and water out until it's fixed.", "windshield repair tape clear"],
+    ["Wiper blades", "Worn blades drag grit across the glass. Match your car's sizes.", "windshield wiper blades"]
+  ],
+  "mobile-tire-service": [
+    ["Tire plug kit", "A roadside fix for a nail in the tread until you can get a proper patch.", "tire plug kit heavy duty"],
+    ["Portable tire inflator", "Plugs into the car or runs on a battery to top up a low tire.", "portable tire inflator"],
+    ["Torque wrench", "Tightens lug nuts to the right spec after a spare swap.", "torque wrench lug nut"],
+    ["Tire pressure gauge", "Check pressures monthly. Low tires wear out faster.", "digital tire pressure gauge"]
+  ],
+  "towing": [
+    ["Jump starter pack", "Starts a dead battery without a second car.", "portable jump starter"],
+    ["Roadside emergency kit", "Cables, reflective triangles, a flashlight and basic tools in one bag.", "roadside emergency kit car"],
+    ["Tow strap", "For pulling a stuck car out of mud or snow. Not for highway towing.", "recovery tow strap"],
+    ["Spill-proof fuel can", "Keeps a little extra gas on hand for long drives.", "spill proof gas can"]
+  ],
   "pressure-washing": [
     ["Electric pressure washer", "Enough for driveways, patios and decks at home.", "electric pressure washer"],
     ["Surface cleaner attachment", "Cleans driveways fast without streaks.", "pressure washer surface cleaner attachment"],
