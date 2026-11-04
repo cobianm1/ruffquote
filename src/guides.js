@@ -390,8 +390,8 @@ const GUIDES = [
     slug: "main-sewer-line-cleaning-cost",
     service: "drain-cleaning",
     job: "main sewer line cleaning",
-    title: "Main Sewer Line Cleaning Cost: Clean-Out and Snaking",
-    description: "Main sewer line cleaning cost with and without an easy clean-out, and during regular hours or an emergency. Learn the signs of a main line clog and how to save.",
+    title: "Main Drain and Sewer Line Cleaning Cost",
+    description: "What main drain and sewer line cleaning costs, with or without an easy clean-out, plus when you need hydro jetting, a camera inspection or cast iron descaling.",
     intro: "Clearing a clogged main sewer line takes bigger equipment than a sink snake, so it costs more than a single drain. The price drops a lot when there is an accessible clean-out. Calling at night or on a weekend pushes it higher.",
     rows: [
       { label: "Easy clean-out, regular hours", v: { job: 2, access: 0, when: 0 } },
@@ -421,7 +421,12 @@ const GUIDES = [
     faq: [
       ["What are signs of a main sewer line clog?", "Several drains backing up at once, gurgling toilets, or water rising in a tub or floor drain when you flush are classic signs."],
       ["How often should a main sewer line be cleaned?", "Most homes only need it when there is a problem. Homes with known root issues sometimes schedule it every year or two."],
-      ["Does homeowners insurance cover sewer line clogs?", "Routine clogs usually are not covered. Some policies offer a separate sewer backup add-on for damage, so check yours."]
+      ["Does homeowners insurance cover sewer line clogs?", "Routine clogs usually are not covered. Some policies offer a separate sewer backup add-on for damage, so check yours."],
+      ["Is main drain cleaning the same as sewer line cleaning?", "Usually, yes. Plumbers use both names for clearing the main line that carries all of the home's wastewater out to the city sewer or septic tank."],
+      ["What is hydro jetting and is it worth it?", "Hydro jetting scours the inside of the pipe with high-pressure water. It costs more than cabling, but it clears grease, sludge and fine roots more completely, so it is often worth it for clogs that keep coming back."],
+      ["Do I need a sewer camera inspection?", "If the line clogs more than once a year, or roots keep returning, a camera inspection shows whether the pipe is cracked, sagging or full of roots. It is usually priced on top of the cleaning."],
+      ["What is cast iron pipe descaling?", "Old cast iron drain pipes build up rust and scale inside, which narrows the pipe and catches waste. Descaling grinds that buildup away with special cutting heads. It takes longer than a normal cleaning and is usually quoted separately."],
+      ["What should I do during a sewer backup?", "Stop running water and flushing, keep people and pets away from the sewage, and call a plumber. If sewage has spread across floors, a water damage or cleanup company may be needed after the line is cleared."]
     ]
   },
   {

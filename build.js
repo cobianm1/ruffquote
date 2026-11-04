@@ -90,6 +90,14 @@ function gearQuick(slug, set = GEAR, id = "gear", lead = "<b>Doing it yourself?<
   return `<div class="quickshop">${lead} ${items.map(([name, , q]) => `<a href="${amazonUrl(q)}" target="_blank" rel="sponsored nofollow noopener">${esc(name)}</a>`).join("")}<a class="more" href="#${id}">See all gear ↓</a><small>As an Amazon Associate we earn from qualifying purchases.</small></div>`;
 }
 
+// Search results show the year in the title, which tells people the prices are current.
+// Drops the brand when the title would get long enough for Google to cut it off.
+const YEAR = new Date().getFullYear();
+function withYear(t) {
+  const dated = t.endsWith(")") ? `${t.slice(0, -1)}, ${YEAR})` : `${t} (${YEAR})`;
+  return dated.length + 12 <= 70 ? `${dated} | RuffQuote` : dated;
+}
+
 function layout({ title, description, urlPath, body, service, jsonld, image }) {
   const og = !image ? "" : image.url.includes("pexels.com") ? `${image.url}?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop` : `${image.url}?auto=format&fit=crop&w=1200&h=630&q=70`;
   return `<!doctype html>
@@ -247,7 +255,7 @@ function servicePage(s) {
     <p><a href="#" data-go="cust">See what customers expect to pay</a></p>
   </div>
 </section>`;
-  const title = `${s.name} Cost Calculator: What Should You Pay? | RuffQuote`;
+  const title = withYear(`${s.name} Cost Calculator: What Should You Pay?`);
   const description = `Free ${s.name.toLowerCase()} cost calculator. See a fair price range for your job, what most people pay, and what affects the price. ${s.name} pros can build a price list too.`;
   const jsonld = {
     "@context": "https://schema.org", "@type": "FAQPage",
@@ -379,7 +387,7 @@ ${gearBlock(s.slug, "Do it yourself or hire a pro?", GEAR, "gear", esc(g.diy))}
 ${others.length ? `<section><h2>More ${s.name.toLowerCase()} cost guides</h2><ul class="guidelist">${others.map(x => `<li><a href="/${x.service}/${x.slug}/">${esc(x.job[0].toUpperCase() + x.job.slice(1))} cost</a></li>`).join("")}</ul></section>` : ""}`;
   const jsonld = { "@context": "https://schema.org", "@type": "FAQPage",
     mainEntity: g.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
-  return layout({ title: `${g.title} | RuffQuote`, description: g.description, urlPath: `/${s.slug}/${g.slug}/`, body, jsonld, image: pic(s.slug, 1) });
+  return layout({ title: withYear(g.title), description: g.description, urlPath: `/${s.slug}/${g.slug}/`, body, jsonld, image: pic(s.slug, 1) });
 }
 
 function categoryPage(c) {
